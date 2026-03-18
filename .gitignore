@@ -1,37 +1,257 @@
-# Dependencies
+# ============================================
+# IDE / 编辑器
+# ============================================
+
+# JetBrains (WebStorm, IntelliJ, PyCharm, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Trae (字节跳动 AI IDE)
+.trae/
+.traeignore
+
+# Cursor (AI 编辑器)
+.cursor/
+.cursorrules
+
+# Windsurf (Codeium AI IDE)
+.windsurf/
+
+# Zed
+.zed/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# NetBeans
+nbproject/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# Vim
+*.swp
+*.swo
+*~
+.vim/
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Nova (Panic)
+.nova/
+
+# Fleet (JetBrains 轻量编辑器)
+.fleet/
+
+# Brackets
+.brackets.json
+
+# Atom
+.atom/
+
+# ============================================
+# 依赖 / 包管理
+# ============================================
+
+# Node.js / npm / yarn / pnpm
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.pnpm-debug.log*
+.pnpm-store/
 
-# Build output
+# Bower
+bower_components/
+
+# Deno
+deno.lock
+
+# Bun
+bun.lockb
+
+# ============================================
+# 构建输出 / 生成文件
+# ============================================
+
+# 常见构建目录
 dist/
 build/
+out/
+public/build/
+target/
 
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Vite
+.vite/
 
-# IDE and editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# Next.js
+.next/
+.vercel/
 
-# OS generated files
-.DS_Store
-Thumbs.db
+# Nuxt
+.nuxt/
+.nitro/
+.output/
 
-# Log files
-logs
+# Gatsby
+.cache/
+public/
+
+# Vue
+*.vue.js
+*.vue.js.map
+
+# React
+*.react.js
+
+# 压缩文件
+*.min.js
+*.min.css
+
+# Source maps
+*.map
+
+# ============================================
+# 日志 / 临时文件 / 缓存
+# ============================================
+
 *.log
-
-# Temporary files
+logs/
+*.tmp
+*.temp
 tmp/
 temp/
+*.pid
+*.seed
+*.pid.lock
+
+# 缓存
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+.prettiercache
+*.tsbuildinfo
+
+# ============================================
+# 操作系统文件
+# ============================================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+
+# Linux
+*~
+.nfs*
+
+# ============================================
+# 环境 / 敏感文件
+# ============================================
+
+# 环境变量（不要提交真实密钥！）
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+
+# 证书/密钥
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# ============================================
+# 测试 / 覆盖率
+# ============================================
+
+coverage/
+.nyc_output/
+.coverage/
+htmlcov/
+.tox/
+.pytest_cache/
+
+# ============================================
+# 其他工具
+# ============================================
+
+# Git
+*.orig
+
+# SVN
+.svn/
+
+# Mercurial
+.hg/
+
+# Firebase
+.firebase/
+
+# Docker
+.docker/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# 本地历史（某些编辑器）
+.history/
+.localhistory/
+
+# Storybook
+storybook-static/
+
+# ============================================
+# 项目特定（前端原型项目）
+# ============================================
+
+# 本地数据/上传文件（如果有）
+uploads/
+data/local/
