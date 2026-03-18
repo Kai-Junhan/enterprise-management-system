@@ -80,9 +80,10 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
+# Lock 文件建议提交，确保依赖版本一致
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
 .pnpm-debug.log*
 .pnpm-store/
 
@@ -118,9 +119,9 @@ target/
 .nitro/
 .output/
 
-# Gatsby
-.cache/
-public/
+# Gatsby（本项目未使用，相关规则注释掉）
+# .cache/
+# public/
 
 # Vue
 *.vue.js
