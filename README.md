@@ -428,28 +428,439 @@ npm run dev
 
 ---
 
-## 协作流程
+## Git 命令大全（新手必读）
 
-1. **拉取最新代码**
-   ```bash
-   git pull origin main
-   ```
+### 基础配置（首次使用必做）
 
-2. **创建功能分支**
-   ```bash
-   git checkout -b feature/production-plan
-   ```
+```bash
+# 设置用户名
+git config --global user.name "你的名字"
 
-3. **开发并提交**
-   ```bash
-   git add .
-   git commit -m "feat: 完成生产计划管理页面"
-   git push origin feature/production-plan
-   ```
+# 设置邮箱
+git config --global user.email "你的邮箱@example.com"
 
-4. **创建 Pull Request**：在 GitHub/GitLab 上创建 PR，等待代码审查
+# 查看当前配置
+git config --list
 
-5. **合并代码**：审查通过后合并到 main 分支
+# 设置默认分支名
+git config --global init.defaultBranch main
+```
+
+---
+
+### 克隆项目
+
+```bash
+# 克隆远程仓库到本地
+git clone https://github.com/用户名/仓库名.git
+
+# 克隆到指定文件夹
+git clone https://github.com/用户名/仓库名.git 文件夹名
+```
+
+---
+
+### 查看状态
+
+```bash
+# 查看当前状态（修改了哪些文件）
+git status
+
+# 查看简短状态
+git status -s
+
+# 查看提交历史
+git log
+
+# 查看简洁历史（一行显示）
+git log --oneline
+
+# 查看最近3次提交
+git log -3
+
+# 查看某个文件的修改历史
+git log --follow 文件路径
+
+# 查看文件具体修改内容
+git diff
+
+# 查看已暂存的修改
+git diff --staged
+```
+
+---
+
+### 分支操作
+
+```bash
+# 查看所有分支
+git branch
+
+# 查看远程分支
+git branch -r
+
+# 查看所有分支（本地+远程）
+git branch -a
+
+# 创建新分支
+git branch 分支名
+
+# 切换分支
+git checkout 分支名
+
+# 创建并切换到新分支（推荐）
+git checkout -b 分支名
+
+# 例如：创建功能分支
+git checkout -b feature/production-plan
+
+# 例如：创建修复分支
+git checkout -b fix/login-bug
+
+# 删除本地分支
+git branch -d 分支名
+
+# 强制删除分支（如果分支未合并）
+git branch -D 分支名
+
+# 删除远程分支
+git push origin --delete 分支名
+
+# 重命名分支
+git branch -m 旧分支名 新分支名
+
+# 合并分支到当前分支
+git merge 分支名
+```
+
+---
+
+### 添加和提交
+
+```bash
+# 添加单个文件到暂存区
+git add 文件名
+
+# 添加多个文件
+git add 文件1 文件2 文件3
+
+# 添加所有修改的文件（推荐）
+git add .
+
+# 添加所有文件（包括删除的）
+git add -A
+
+# 只添加已跟踪文件的修改
+git add -u
+
+# 提交暂存区的文件
+git commit -m "提交说明"
+
+# 添加并提交（合并写法）
+git commit -am "提交说明"
+
+# 修改上一次提交信息（未push时）
+git commit --amend -m "新的提交信息"
+
+# 跳过暂存直接提交所有已跟踪文件
+git commit -a -m "提交说明"
+```
+
+---
+
+### 推送和拉取
+
+```bash
+# 推送当前分支到远程
+git push
+
+# 首次推送并设置上游分支（推荐）
+git push -u origin 分支名
+
+# 推送到指定远程分支
+git push origin 分支名
+
+# 强制推送（危险操作，慎用）
+git push -f origin 分支名
+
+# 拉取远程代码并合并
+git pull
+
+# 拉取指定远程分支
+git pull origin 分支名
+
+# 拉取但不合并（只下载）
+git fetch origin
+
+# 查看远程仓库信息
+git remote -v
+
+# 添加远程仓库
+git remote add origin https://github.com/用户名/仓库名.git
+
+# 修改远程仓库地址
+git remote set-url origin 新地址
+```
+
+---
+
+### 撤销操作
+
+```bash
+# 撤销工作区的修改（丢弃修改）
+git checkout -- 文件名
+
+# 撤销所有工作区修改
+git checkout -- .
+
+# 撤销暂存区的文件（取消add）
+git reset HEAD 文件名
+
+# 撤销所有暂存
+git reset HEAD
+
+# 撤销最近一次提交（保留修改）
+git reset --soft HEAD~1
+
+# 撤销最近一次提交（不保留修改）
+git reset --hard HEAD~1
+
+# 撤销最近两次提交
+git reset --hard HEAD~2
+
+# 回退到指定提交
+git reset --hard 提交ID
+
+# 查看已删除的提交（用于恢复）
+git reflog
+
+# 恢复误删的提交
+git reset --hard 提交ID
+```
+
+---
+
+### 暂存工作
+
+```bash
+# 暂存当前工作（切换分支前使用）
+git stash
+
+# 暂存并添加说明
+git stash save "说明信息"
+
+# 查看暂存列表
+git stash list
+
+# 恢复最近的暂存
+git stash pop
+
+# 恢复暂存但不删除记录
+git stash apply
+
+# 恢复指定的暂存
+git stash apply stash@{0}
+
+# 删除暂存
+git stash drop stash@{0}
+
+# 删除所有暂存
+git stash clear
+```
+
+---
+
+### 标签管理
+
+```bash
+# 创建标签
+git tag v1.0.0
+
+# 创建带说明的标签
+git tag -a v1.0.0 -m "版本1.0.0发布"
+
+# 查看所有标签
+git tag
+
+# 查看标签详情
+git show v1.0.0
+
+# 推送标签到远程
+git push origin v1.0.0
+
+# 推送所有标签
+git push --tags
+
+# 删除本地标签
+git tag -d v1.0.0
+
+# 删除远程标签
+git push origin --delete tag v1.0.0
+```
+
+---
+
+### 解决冲突
+
+```bash
+# 查看冲突文件
+git status
+
+# 编辑冲突文件后，标记为已解决
+git add 冲突文件名
+
+# 提交合并结果
+git commit -m "解决合并冲突"
+
+# 取消合并
+git merge --abort
+
+# 使用 ours 策略（保留当前分支）
+git checkout --ours 冲突文件
+
+# 使用 theirs 策略（保留合并分支）
+git checkout --theirs 冲突文件
+```
+
+---
+
+### 其他常用命令
+
+```bash
+# 查看文件内容（Git历史版本）
+git show 提交ID:文件路径
+
+# 搜索提交内容
+git log -S "搜索内容"
+
+# 查看某行代码的修改历史
+git blame 文件名
+
+# 清理未跟踪的文件
+git clean -fd
+
+# 压缩最近N次提交为一次
+git rebase -i HEAD~N
+
+# 只拉取某个文件
+git checkout origin/分支名 -- 文件路径
+
+# 比较两个分支的差异
+git diff 分支1 分支2
+
+# 比较两个分支的文件差异
+git diff 分支1 分支2 文件路径
+```
+
+---
+
+### 团队协作工作流
+
+```bash
+# 第一步：克隆项目（首次）
+git clone https://github.com/用户名/项目名.git
+cd 项目名
+
+# 第二步：创建自己的功能分支
+git checkout -b feature/功能名称
+
+# 第三步：开发代码，定期提交
+git add .
+git commit -m "feat: 添加xxx功能"
+
+# 第四步：推送分支到远程
+git push -u origin feature/功能名称
+
+# 第五步：在 GitHub 上创建 Pull Request
+
+# 第六步：代码审查通过后合并
+
+# 第七步：删除已合并的分支
+git checkout main
+git pull origin main
+git branch -d feature/功能名称
+git push origin --delete feature/功能名称
+```
+
+---
+
+### 常见问题解决
+
+#### 问题1：提交错文件了
+```bash
+# 撤销最近一次提交（保留修改）
+git reset --soft HEAD~1
+
+# 重新添加正确的文件
+git add 正确的文件
+git commit -m "正确的提交信息"
+```
+
+#### 问题2：push被拒绝
+```bash
+# 先拉取远程更新
+git pull origin 分支名
+
+# 如果有冲突，解决后再提交
+git add .
+git commit -m "解决冲突"
+git push origin 分支名
+```
+
+#### 问题3：想放弃所有本地修改
+```bash
+# 重置到远程状态
+git fetch origin
+git reset --hard origin/分支名
+```
+
+#### 问题4：误删了分支
+```bash
+# 查看操作记录
+git reflog
+
+# 找到删除前的提交ID，恢复
+git checkout -b 分支名 提交ID
+```
+
+#### 问题5：合并了错误的分支
+```bash
+# 在push之前可以撤销
+git reset --hard HEAD~1
+
+# 如果已经push，需要创建新提交来撤销
+git revert -m 1 合并提交ID
+```
+
+---
+
+### Git 提交规范
+
+```
+feat: 新功能
+fix: 修复 bug
+style: 样式调整（不影响代码逻辑）
+refactor: 代码重构（既不是新功能也不是修复）
+docs: 文档更新
+test: 测试相关
+chore: 构建/工具变动
+perf: 性能优化
+ci: CI/CD 配置变动
+```
+
+**提交信息示例：**
+```bash
+# 好的提交信息
+git commit -m "feat: 添加用户登录功能"
+git commit -m "fix: 修复登录页面验证码不显示问题"
+git commit -m "style: 调整按钮样式"
+git commit -m "docs: 更新 README 安装说明"
+
+# 不好的提交信息
+git commit -m "update"
+git commit -m "fix"
+git commit -m "asdfgh"
+```
 
 ---
 
