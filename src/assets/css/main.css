@@ -2,6 +2,7 @@
 @import './base/reset.css';
 @import './base/variables.css';
 @import './base/typography.css';
+@import './base/animations.css';
 
 /* 2. 组件样式 components */
 @import './components/header.css';

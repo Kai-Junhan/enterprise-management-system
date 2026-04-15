@@ -37,6 +37,23 @@
             <a href="register.html" class="btn btn-primary">注册</a>
             <!--class样式：主要按钮样式，一般颜色更突出-->
         </div>
+        <!-- 移动端菜单按钮 -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            ☰
+        </button>
+    </div>
+    <!-- 移动端菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-nav">
+            <a href="#hero">首页</a>
+            <a href="#products">产品</a>
+            <a href="#technology">技术</a>
+            <a href="#about">关于</a>
+        </div>
+        <div class="mobile-menu-actions">
+            <a href="login.html" class="btn btn-outline">登录</a>
+            <a href="register.html" class="btn btn-primary">注册</a>
+        </div>
     </div>
 </header>
 
@@ -81,20 +98,17 @@
         <p class="section-subtitle">持续投入研发，打造领先的技术能力。</p>
         <div class="tech-grid">
             <div class="tech-card">
-                <img src="../assets/images/tech/tech-1.png" alt="AI智能引擎"
-                     style="height: 120px; object-fit: contain; margin-bottom: 24px;display: block;margin-left: auto; margin-right: auto;">
+                <img src="../assets/images/tech/tech-1.png" alt="AI智能引擎" loading="lazy">
                 <h3>AI智能引擎</h3>
                 <p>机器学习与自然语言处理</p>
             </div>
             <div class="tech-card">
-                <img src="../assets/images/tech/tech-2.png" alt="云计算平台"
-                     style="height: 120px; object-fit: contain; margin-bottom: 24px;display: block;margin-left: auto; margin-right: auto;">
+                <img src="../assets/images/tech/tech-2.png" alt="云计算平台" loading="lazy">
                 <h3>云计算平台</h3>
                 <p>分布式架构，弹性扩展</p>
             </div>
             <div class="tech-card">
-                <img src="../assets/images/tech/tech-3.png" alt="大数据分析"
-                     style="height: 120px; object-fit: contain; margin-bottom: 24px;display: block;margin-left: auto; margin-right: auto;">
+                <img src="../assets/images/tech/tech-3.png" alt="大数据分析" loading="lazy">
                 <h3>大数据分析</h3>
                 <p>实时计算与智能决策</p>
             </div>
@@ -110,43 +124,37 @@
         <div class="products-grid">
             <!-- 小麦手机 -->
             <div class="product-card">
-                <img src="../assets/images/products/product-1.jpg" alt="小麦最新手机"
-                     style="height: 180px; width: 100%; object-fit: cover; border-radius: 8px; margin-bottom: 24px;">
+                <img src="../assets/images/products/product-1.jpg" alt="小麦最新手机" loading="lazy">
                 <h3>小麦手机</h3>
                 <p>智能高效的好伙伴</p>
             </div>
             <!-- 小麦平板 -->
             <div class="product-card">
-                <img src="../assets/images/products/product-2.jpg" alt="小麦最新平板"
-                     style="height: 180px; width: 100%; object-fit: cover; border-radius: 8px; margin-bottom: 24px;">
+                <img src="../assets/images/products/product-2.jpg" alt="小麦最新平板" loading="lazy">
                 <h3>小麦平板</h3>
                 <p>追剧游戏的最佳搭档</p>
             </div>
             <!-- 小麦笔记本电脑 -->
             <div class="product-card">
-                <img src="../assets/images/products/product-3.jpg" alt="小麦最新笔记本电脑" style="height: 180px;
-                width: 100%; object-fit: cover; border-radius: 8px; margin-bottom: 24px;">
+                <img src="../assets/images/products/product-3.jpg" alt="小麦最新笔记本电脑" loading="lazy">
                 <h3>小麦笔记本电脑</h3>
                 <p>轻便能抗 学习工作的好战友</p>
             </div>
             <!-- 小麦台式电脑 -->
             <div class="product-card">
-                <img src="../assets/images/products/product-4.jpg" alt="小麦最新台式电脑" style="height: 180px;
-                width: 100%; object-fit: cover; border-radius: 8px; margin-bottom: 24px;">
+                <img src="../assets/images/products/product-4.jpg" alt="小麦最新台式电脑" loading="lazy">
                 <h3>小麦最新台式电脑</h3>
                 <p>性能一绝的游戏办公搭子</p>
             </div>
             <!-- 小麦手表 -->
             <div class="product-card">
-                <img src="../assets/images/products/product-5.jpg" alt="小麦最新手表" style="height: 180px;
-                width: 100%; object-fit: cover; border-radius: 8px; margin-bottom: 24px;">
+                <img src="../assets/images/products/product-5.jpg" alt="小麦最新手表" loading="lazy">
                 <h3>小麦手表</h3>
                 <p>身心健康的守护者</p>
             </div>
             <!-- 小麦扫地机器人 -->
             <div class="product-card">
-                <img src="../assets/images/products/product-6.jpg" alt="小麦最新扫地机器人" style="height: 180px;
-                width: 100%; object-fit: cover; border-radius: 8px; margin-bottom: 24px;">
+                <img src="../assets/images/products/product-6.jpg" alt="小麦最新扫地机器人" loading="lazy">
                 <h3>小麦扫地机器人</h3>
                 <p>居家生活的好助手</p>
             </div>
@@ -156,96 +164,52 @@
 
 <!-- 合作伙伴区域（finished） -->
 <section id="partners" class="landing-section">
-    <!-- 合作伙伴的css样式 -->
-    <style>
-        .partners-grid {
-            display: grid; /* 网格布局 */
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* 自动生成响应式列数*/
-            gap: 32px; /* 网格项之间的间距 */
-            align-items: center; /* 网格项垂直居中 */
-            justify-items: center; /* 网格项水平居中 */
-            padding: 20px 0; /* 内边距 */
-        }
-
-        .partner-logo {
-            padding: 16px;
-            opacity: 0.6; /* 透明度 */
-            transition: 0.3s; /* 过渡效果 */
-        }
-
-        .partner-logo:hover {
-            opacity: 1; /* 鼠标悬停时 透明度为100% */
-        }
-
-        .partner-logo img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain; /* 保持图片比例 */
-            transition: transform 0.3s;
-        }
-
-        .partner-logo:hover img {
-            transform: scale(1.1); /* 鼠标悬停时 图片放大1.1倍 */
-        }
-
-        /* 响应式布局 */
-        @media (max-width: 768px) {
-            .partners-grid {
-                grid-template-columns: repeat(3, 1fr); /* 响应式布局 三列 */
-            }
-
-            .partner-logo img {
-                width: 60px;
-                height: 60px; /* 响应式布局 图片大小从80x80变成60x60 */
-            }
-        }
-    </style>
     <!-- 合作伙伴的logo照片 -->
     <div class="container">
         <h2 class="section-title">合作伙伴</h2>
         <p class="section-subtitle">与全球领先企业携手，共建智能生态。</p>
         <div class="partners-grid">
             <div class="partner-logo">
-                <img src="../assets/images/partners/alibabacloud-color.svg" alt="阿里云">
+                <img src="../assets/images/partners/alibabacloud-color.svg" alt="阿里云" loading="lazy">
             </div>
             <div class="partner-logo">
-                <img src="../assets/images/partners/alibabadotcom-color.svg" alt="阿里巴巴">
+                <img src="../assets/images/partners/alibabadotcom-color.svg" alt="阿里巴巴" loading="lazy">
             </div>
             <div class="partner-logo">
-                <img src="../assets/images/partners/alipay-color.svg" alt="支付宝">
+                <img src="../assets/images/partners/alipay-color.svg" alt="支付宝" loading="lazy">
             </div>
             <div class="partner-logo">
-                <img src="../assets/images/partners/xiaomi-color.svg" alt="小米">
+                <img src="../assets/images/partners/xiaomi-color.svg" alt="小米" loading="lazy">
             </div>
             <div class="partner-logo">
-                <img src="../assets/images/partners/tiktok-color.svg" alt="字节跳动">
+                <img src="../assets/images/partners/tiktok-color.svg" alt="字节跳动" loading="lazy">
             </div>
             <div class="partner-logo">
-                <img src="../assets/images/partners/nvidia-color.svg" alt="英伟达">
+                <img src="../assets/images/partners/nvidia-color.svg" alt="英伟达" loading="lazy">
             </div>
             <div class="partner-logo">
-                <img src="../assets/images/partners/tesla-color.svg" alt="特斯拉">
+                <img src="../assets/images/partners/tesla-color.svg" alt="特斯拉" loading="lazy">
             </div>
             <div class="partner-logo">
-                <img src="../assets/images/partners/facebook-color.svg" alt="Meta">
+                <img src="../assets/images/partners/facebook-color.svg" alt="Meta" loading="lazy">
             </div>
             <div class="partner-logo">
-                <img src="../assets/images/partners/huggingface-color.svg" alt="Hugging Face">
+                <img src="../assets/images/partners/huggingface-color.svg" alt="Hugging Face" loading="lazy">
             </div>
         </div>
     </div>
 </section>
 
 <!-- 创始人团队区域（finished） -->
-<section id="founders" class="landing-section" style="background: var(--color-bg);">
+<section id="founders" class="landing-section">
     <div class="container">
         <h2 class="section-title">认识小麦的掌舵人</h2>
         <p class="section-subtitle">由业界顶尖技术领袖和商业精英联手打造的未来科技。</p>
         <div class="founders-grid">
             <!--姚依-->
             <div class="founder-card">
-                <img src="../assets/images/founders/founder-1.jpg" alt="姚 依" class="founder-photo">
-                <div class="image-placeholder text-sm" style="height:250px;width:100%;margin-bottom:16px;">
+                <img src="../assets/images/founders/founder-1.jpg" alt="姚 依" class="founder-photo" loading="lazy">
+                <div class="image-placeholder text-sm">
                 </div>
                 <h3>姚 依</h3>
                 <p class="founder-title">创始人兼首席执行官 (CEO)</p>
@@ -255,8 +219,8 @@
             <!--凌清杨-->
             <div class="founder-card">
                 <img src="../assets/images/founders/founder-2.jpg" alt="凌清杨"
-                     class="founder-photo">
-                <div class="image-placeholder text-sm" style="height:250px;width:100%;margin-bottom:16px;">
+                     class="founder-photo" loading="lazy">
+                <div class="image-placeholder text-sm">
                 </div>
                 <h3>凌清杨</h3>
                 <p class="founder-title">联合创始人兼首席技术官 (CTO)</p>
@@ -266,8 +230,8 @@
             <!--胡庭瑜-->
             <div class="founder-card">
                 <img src="../assets/images/founders/founder-3.jpg" alt="胡庭瑜"
-                     class="founder-photo">
-                <div class="image-placeholder text-sm" style="height:250px;width:100%;margin-bottom:16px;">
+                     class="founder-photo" loading="lazy">
+                <div class="image-placeholder text-sm">
                 </div>
                 <h3>胡庭瑜</h3>
                 <p class="founder-title">联合创始人兼首席产品官 (CPO)</p>
@@ -277,8 +241,8 @@
             <!--开俊涵-->
             <div class="founder-card">
                 <img src="../assets/images/founders/founder-4.jpg" alt="开俊涵"
-                     class="founder-photo">
-                <div class="image-placeholder text-sm" style="height:250px;width:100%;margin-bottom:16px;">
+                     class="founder-photo" loading="lazy">
+                <div class="image-placeholder text-sm">
                 </div>
                 <h3>开俊涵</h3>
                 <p class="founder-title">联合创始人兼首席运营官 (COO)</p>
@@ -294,9 +258,9 @@
     <div class="container">
         <h2 class="cta-title">加入小麦，共创未来</h2>
         <p class="cta-subtitle">立即注册，开启您的智能之旅</p>
-        <div style="display: flex; gap: 16px; justify-content: center; align-items: center;">
-            <a href="register.html" class="btn btn-white btn-lg" style="color: var(--color-primary);">免费注册</a>
-            <a href="login.html" class="btn btn-outline btn-lg" style="color: white; border-color: white;">立即登录</a>
+        <div class="cta-actions">
+            <a href="register.html" class="btn btn-white btn-lg">免费注册</a>
+            <a href="login.html" class="btn btn-outline btn-lg">立即登录</a>
         </div>
     </div>
 </section>
@@ -306,12 +270,11 @@
     <div class="container">
         <div class="footer-content">
             <div class="footer-brand">
-                <div style="display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 24px;">
-                    <img src="../assets/images/logo.png" alt="小麦科技"
-                         style="width: auto; height: 64px; object-fit: contain;">
-                    <span style="font-size: 32px; font-weight: bold; color: var(--color-primary);">小麦企业系统</span>
+                <div class="footer-logo-container">
+                    <img src="../assets/images/logo.png" alt="小麦科技" class="footer-logo">
+                    <span class="footer-brand-name">小麦企业系统</span>
                 </div>
-                <p style="font-size: 16px;">小麦科技，让科技触手可及。</p>
+                <p>小麦科技，让科技触手可及。</p>
             </div>
             <div class="footer-links">
                 <a href="#about">关于我们</a>
