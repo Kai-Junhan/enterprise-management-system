@@ -1,6 +1,12 @@
 'use strict';
 
-// 设备管理子系统的种子数据，localStorage 为空时用于初始化页面。
+/**
+ * 设备管理种子数据。
+ * 输入：由普通 script 标签在设备页面加载到全局作用域。
+ * 输出：equipmentSystem.store 在 localStorage 为空时复制设备、维护和故障记录。
+ *
+ * 原因：项目没有后端接口，种子数据负责保证清空浏览器数据后仍能展示完整业务闭环。
+ */
 const equipmentData = {
   equipment: [
     { id: 'EQ001', name: '数控车床A', model: 'CNC-2000', location: '车间一', status: '运行中', purchaseDate: '2022-05-10', lastMaintain: '2026-02-15', nextMaintain: '2026-05-15' },

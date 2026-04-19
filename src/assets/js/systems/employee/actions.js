@@ -3,7 +3,11 @@
 window.employeeSystem = window.employeeSystem || {};
 
 employeeSystem.actions = (function(store) {
-  // 新增员工档案，并生成员工编号。
+  /**
+   * 新增员工档案。
+   * @param {Object} payload 员工表单数据。
+   * @returns {Object} 写入本地状态的新员工记录。
+   */
   function createEmployee(payload) {
     return store.mutate((state) => {
       const employee = {
@@ -24,7 +28,12 @@ employeeSystem.actions = (function(store) {
     });
   }
 
-  // 更新员工档案基础字段。
+  /**
+   * 更新员工档案基础字段。
+   * @param {string} id 员工编号。
+   * @param {Object} payload 员工表单数据。
+   * @returns {Object|null} 更新后的员工记录；未找到员工时返回 null。
+   */
   function updateEmployee(id, payload) {
     return store.mutate((state) => {
       const employee = state.employees.find((item) => item.id === id);
@@ -44,14 +53,22 @@ employeeSystem.actions = (function(store) {
     });
   }
 
-  // 删除员工档案。
+  /**
+   * 删除员工档案。
+   * @param {string} id 员工编号。
+   * @returns {void}
+   */
   function deleteEmployee(id) {
     store.mutate((state) => {
       state.employees = state.employees.filter((item) => item.id !== id);
     });
   }
 
-  // 新增招聘计划。
+  /**
+   * 新增招聘计划。
+   * @param {Object} payload 招聘计划表单数据。
+   * @returns {Object} 写入本地状态的新招聘计划。
+   */
   function createRecruitment(payload) {
     return store.mutate((state) => {
       const item = {
@@ -70,7 +87,11 @@ employeeSystem.actions = (function(store) {
     });
   }
 
-  // 删除招聘计划。
+  /**
+   * 删除招聘计划。
+   * @param {string} id 招聘计划编号。
+   * @returns {void}
+   */
   function deleteRecruitment(id) {
     store.mutate((state) => {
       state.recruitment = state.recruitment.filter((item) => item.id !== id);

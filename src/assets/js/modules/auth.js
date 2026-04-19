@@ -3,7 +3,14 @@
 const auth = {
   USER_KEY: 'xm_user',
 
-  // 演示系统登录：当前无后端，使用固定管理员账号写入 sessionStorage。
+  /**
+   * 使用演示管理员账号登录。
+   * @param {string} username 用户名。
+   * @param {string} password 密码。
+   * @returns {boolean} 账号匹配并写入 sessionStorage 时返回 true。
+   *
+   * 原因：项目没有后端认证服务，登录态只需要支撑本机演示流程。
+   */
   login(username, password) {
     try {
       if (username === 'admin' && password === '123456') {
@@ -17,7 +24,12 @@ const auth = {
     return false;
   },
 
-  // 清除当前管理员会话，并按当前页面深度返回落地页。
+  /**
+   * 退出当前演示会话并返回落地页。
+   * @returns {void}
+   *
+   * 原因：后台页面位于多级目录时，跳转前需要按 pages 层级计算相对路径。
+   */
   logout() {
     try {
       storage.session.remove(this.USER_KEY);
@@ -35,7 +47,10 @@ const auth = {
     window.location.href = 'landing.html';
   },
 
-  // 获取当前浏览器会话中的登录用户。
+  /**
+   * 读取当前浏览器会话用户。
+   * @returns {{username: string, role: string, loginTime: number}|null} 当前用户；读取失败或未登录返回 null。
+   */
   getUser() {
     try {
       return storage.session.get(this.USER_KEY);
@@ -45,12 +60,20 @@ const auth = {
     }
   },
 
-  // 判断是否存在有效演示会话。
+  /**
+   * 判断是否存在有效演示会话。
+   * @returns {boolean} 存在用户会话时返回 true。
+   */
   isLoggedIn() {
     return !!this.getUser();
   },
 
-  // 保护后台业务页面，未登录时重定向到登录页。
+  /**
+   * 保护后台业务页面。
+   * @returns {void}
+   *
+   * 原因：静态页面无法通过服务端拦截，未登录时只能在浏览器端重定向到登录页。
+   */
   guard() {
     try {
       if (!this.isLoggedIn()) {
@@ -70,7 +93,15 @@ const auth = {
     }
   },
 
-  // 注册演示账号到 localStorage，供注册页完成无后端闭环。
+  /**
+   * 注册演示账号到 localStorage。
+   * @param {string} username 用户名。
+   * @param {string} email 邮箱。
+   * @param {string} password 密码。
+   * @returns {boolean} 用户名和邮箱未重复时返回 true。
+   *
+   * 原因：注册页需要形成无后端闭环，账号数据只在当前浏览器中保存。
+   */
   register(username, email, password) {
     try {
       const users = storage.get('xm_users') || [];

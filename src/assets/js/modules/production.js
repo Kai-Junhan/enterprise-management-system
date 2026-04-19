@@ -1,7 +1,12 @@
 ﻿'use strict';
 
 const productionModule = (function(system) {
-  // 生产管理兼容入口，真实页面逻辑由 productionSystem 负责。
+  /**
+   * 初始化生产管理兼容门面。
+   * @returns {void}
+   *
+   * 原因：页面加载器仍调用 window.productionModule.init，真实实现已下沉到 productionSystem。
+   */
   function init() {
     if (system && typeof system.init === 'function') {
       system.init();

@@ -2,7 +2,13 @@
 
 window.employeeSystem = window.employeeSystem || {};
 
-// 员工管理页面控制器：负责员工首页、考勤、绩效、招聘和档案页。
+/**
+ * 员工管理页面控制器。
+ * 输入：employeeSystem.store/actions/renderers 与 EnterpriseView。
+ * 输出：按当前 HTML 文件名初始化员工首页、考勤、绩效、招聘或档案维护页。
+ *
+ * 原因：员工域包含多个静态子页面，统一分发能保持 HTML 里不写内联业务脚本。
+ */
 employeeSystem.pages = (function(store, actions, renderers, view) {
   // 打开员工首页的档案详情弹窗。
   function showEmployeeDetail(id) {
@@ -155,6 +161,7 @@ employeeSystem.pages = (function(store, actions, renderers, view) {
 
     const searchInput = document.getElementById('search-input');
     const deptFilter = document.getElementById('dept-filter');
+    // 详情弹窗只展示员工信息，不维护编辑状态，关闭时只需要移除遮罩激活类。
     const closeModal = () => removeClass(document.getElementById('modal-overlay'), 'active');
 
     // 刷新员工首页统计、部门筛选和员工列表。

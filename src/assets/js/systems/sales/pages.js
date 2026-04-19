@@ -2,7 +2,13 @@
 
 window.salesSystem = window.salesSystem || {};
 
-// 销售管理页面控制器：负责销售总览、客户、订单、定价、报表和团队页。
+/**
+ * 销售管理页面控制器。
+ * 输入：salesSystem.store/actions/renderers 与 EnterpriseView。
+ * 输出：按当前 HTML 文件名初始化销售总览、客户、订单、定价、报表或团队页。
+ *
+ * 原因：销售域页面共享客户、订单、定价和团队状态，集中分发能保持筛选和统计刷新一致。
+ */
 salesSystem.pages = (function(store, actions, renderers, view) {
   // 渲染销售管理首页的订单摘要行。
   function renderSalesIndexRow(item) {
@@ -65,7 +71,11 @@ salesSystem.pages = (function(store, actions, renderers, view) {
     `;
   }
 
-  // 创建销售月度报表行渲染器。
+  /**
+   * 创建销售月度报表行渲染器。
+   * @param {number} maxRevenue 当前报表周期内最高销售额。
+   * @returns {Function} 接收月度报表数据并返回表格行 HTML 的渲染函数。
+   */
   function renderMonthlyReportRow(maxRevenue) {
     return (item) => {
       const barWidth = maxRevenue ? Math.round((item.revenue / maxRevenue) * 100) : 0;

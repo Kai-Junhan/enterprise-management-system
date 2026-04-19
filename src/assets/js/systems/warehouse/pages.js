@@ -2,7 +2,13 @@
 
 window.warehouseSystem = window.warehouseSystem || {};
 
-// 仓储管理页面控制器：负责库存总览、货位、出入库、运输和预警页。
+/**
+ * 仓储管理页面控制器。
+ * 输入：warehouseSystem.store/renderers 与 EnterpriseView。
+ * 输出：按当前 HTML 文件名初始化库存总览、货位、出入库、运输或预警页。
+ *
+ * 原因：仓储域当前以展示为主，多张表共享同一份库存状态，集中初始化可避免页面内联统计逻辑。
+ */
 warehouseSystem.pages = (function(store, renderers, view) {
   // 渲染仓储首页的库存行。
   function renderInventoryRow(item) {
@@ -80,7 +86,11 @@ warehouseSystem.pages = (function(store, renderers, view) {
     `;
   }
 
-  // 创建运输跟踪行渲染器。
+  /**
+   * 创建运输跟踪行渲染器。
+   * @param {Date} today 当前日期。
+   * @returns {Function} 接收出库记录并返回运输跟踪表格行 HTML 的渲染函数。
+   */
   function renderTransportRow(today) {
     return (item) => {
       const outDate = new Date(item.date);

@@ -1,18 +1,37 @@
 'use strict';
 
 const EnterpriseView = (function() {
-  // 读取业务表单控件值，兼容不同子系统页面字段缺失的情况。
+  /**
+   * 读取业务表单控件值。
+   * @param {string} id 控件 id。
+   * @param {string} [fallback=''] 控件不存在或没有 value 时的回退值。
+   * @returns {string} 控件值或回退值。
+   *
+   * 原因：不同业务子页面共用初始化逻辑，字段缺失时不能打断页面加载。
+   */
   function getValue(id, fallback = '') {
     const element = document.getElementById(id);
     return element && typeof element.value !== 'undefined' ? element.value : fallback;
   }
 
-  // 读取搜索框/业务表单文本，并统一去除首尾空白。
+  /**
+   * 读取文本控件并去除首尾空白。
+   * @param {string} id 控件 id。
+   * @param {string} [fallback=''] 回退值。
+   * @returns {string} 规范化后的文本。
+   */
   function getTrimmedValue(id, fallback = '') {
     return String(getValue(id, fallback)).trim();
   }
 
-  // 向当前业务页面的统计区或表格区写入 HTML。
+  /**
+   * 向指定容器写入 HTML。
+   * @param {string} id 容器 id。
+   * @param {string} html 业务渲染后的 HTML 字符串。
+   * @returns {void}
+   *
+   * 原因：当前项目没有前端框架，统计卡片和表格行通过字符串模板统一渲染。
+   */
   function setHtml(id, html) {
     const element = document.getElementById(id);
     if (element) {
@@ -20,24 +39,45 @@ const EnterpriseView = (function() {
     }
   }
 
-  // 获取当前子页面文件名，用于 systems/<domain>/pages.js 分发初始化。
+  /**
+   * 获取当前子页面文件名。
+   * @returns {string} URL 最后一段文件名。
+   */
   function pageName() {
     return window.location.pathname.split('/').pop() || '';
   }
 
-  // 将各子系统的指标配置渲染为统一后台统计卡片。
+  /**
+   * 渲染业务统计卡片。
+   * @param {Array<{icon: string, value: string|number, label: string}>} items 指标配置。
+   * @returns {string} 统计卡片 HTML。
+   */
   function renderStats(items) {
     return items.map((item) => `
       <div class="stat-card"><div class="stat-icon">${item.icon}</div><div class="stat-info"><div class="stat-value">${item.value}</div><div class="stat-label">${item.label}</div></div></div>
     `).join('');
   }
 
-  // 生成后台表格中的状态徽章。
+  /**
+   * 渲染表格状态徽章。
+   * @param {string} text 徽章文案。
+   * @param {string} [className] badge 颜色类。
+   * @returns {string} 徽章 HTML。
+   */
   function renderBadge(text, className) {
     return `<span class="badge ${className || 'badge-default'}">${text}</span>`;
   }
 
-  // 渲染业务表格行，并在无数据时输出统一空状态。
+  /**
+   * 渲染业务表格行。
+   * @param {HTMLElement|null} tbody 表格 body。
+   * @param {Array} list 当前列表数据。
+   * @param {Function} rowRenderer 单行渲染函数。
+   * @param {Object} [emptyOptions] 空状态配置，包含 colspan 和 text。
+   * @returns {void}
+   *
+   * 原因：所有业务域都有列表页，统一空状态能减少各页面重复模板。
+   */
   function renderRows(tbody, list, rowRenderer, emptyOptions) {
     if (!tbody) return;
 
@@ -51,7 +91,13 @@ const EnterpriseView = (function() {
     tbody.innerHTML = list.map(rowRenderer).join('');
   }
 
-  // 对业务列表按指定字段执行关键词过滤。
+  /**
+   * 按关键词过滤业务列表。
+   * @param {Array<Object>} list 原始列表。
+   * @param {string} keyword 搜索关键词。
+   * @param {string[]} fields 参与匹配的字段名。
+   * @returns {Array<Object>} 过滤后的列表；关键词为空时返回原列表。
+   */
   function filterByKeyword(list, keyword, fields) {
     const normalized = String(keyword || '').trim().toLowerCase();
     if (!normalized) return list;
@@ -62,7 +108,13 @@ const EnterpriseView = (function() {
     });
   }
 
-  // 无后端原型里用 prompt 快速采集新增记录字段。
+  /**
+   * 通过 prompt 采集新增记录字段。
+   * @param {Array<Object>} fields 字段配置，包含 name、label、defaultValue 和 required。
+   * @returns {Object|null} 用户输入对象；必填字段为空时返回 null。
+   *
+   * 原因：无后端原型优先闭合业务流程，prompt 能快速完成新增演示而不引入额外表单结构。
+   */
   function promptFields(fields) {
     const result = {};
 
@@ -77,7 +129,13 @@ const EnterpriseView = (function() {
     return result;
   }
 
-  // 统一业务记录删除确认流程，并在删除后刷新当前表格。
+  /**
+   * 执行业务删除确认。
+   * @param {string} message 确认提示文案。
+   * @param {Function} deleteAction 删除操作。
+   * @param {Function} [afterDelete] 删除后的刷新回调。
+   * @returns {void}
+   */
   function confirmDelete(message, deleteAction, afterDelete) {
     if (!window.confirm(message)) return;
 
@@ -87,7 +145,13 @@ const EnterpriseView = (function() {
     }
   }
 
-  // 渲染生产任务进度条，也可复用于其他百分比进度场景。
+  /**
+   * 渲染百分比进度条。
+   * @param {number} progress 0 到 100 的进度值。
+   * @returns {string} 进度条 HTML。
+   *
+   * 原因：生产排产和其他进度型字段需要统一颜色阈值和数字展示。
+   */
   function renderProgress(progress) {
     const color = progress === 100 ? 'var(--color-success)' : progress >= 60 ? 'var(--color-primary)' : 'var(--color-warning)';
     return `
@@ -100,7 +164,13 @@ const EnterpriseView = (function() {
     `;
   }
 
-  // 绑定后台详情/编辑弹窗关闭行为，兼容各业务页面的 modal 结构。
+  /**
+   * 绑定后台弹窗关闭行为。
+   * @param {Function} closeModal 关闭弹窗的业务回调。
+   * @returns {void}
+   *
+   * 原因：关闭按钮、取消按钮和遮罩点击都应进入同一关闭流程，确保编辑状态同步清理。
+   */
   function bindModalClose(closeModal) {
     on(document.getElementById('modal-close'), 'click', closeModal);
     on(document.getElementById('modal-cancel'), 'click', closeModal);

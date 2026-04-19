@@ -3,7 +3,12 @@
 const appRouter = (function() {
   const PUBLIC_PAGES = new Set(['landing.html', 'login.html', 'register.html']);
 
-  // 从 pages 路径解析当前业务域和页面层级。
+  /**
+   * 从当前 URL 解析页面名、业务域和资源路径。
+   * @returns {{pageName: string, section: string, pagesPath: string, rootPath: string}} 页面运行时元信息。
+   *
+   * 原因：静态多级目录页面需要自己计算 `../` 层级，公共组件和业务脚本才能在任意子页面加载。
+   */
   function getPageMeta() {
     const pathParts = window.location.pathname.split('/').filter(Boolean);
     const pagesIndex = pathParts.indexOf('pages');
@@ -32,14 +37,28 @@ const appRouter = (function() {
     };
   }
 
-  // 登录、注册、落地页是公开页，其余企业管理页面都需要会话。
+  /**
+   * 判断当前页面是否允许未登录访问。
+   * @param {{pageName: string}} pageMeta 当前页面元信息。
+   * @returns {boolean} 公开页返回 true，后台业务页返回 false。
+   */
   function isPublicPage(pageMeta) {
     return PUBLIC_PAGES.has(pageMeta.pageName);
   }
 
-  // 公共 header/sidebar 注入后，按当前页面层级修正 logo 和侧边栏链接。
+  /**
+   * 监听公共组件注入，并修正组件内部的图片和侧边栏链接路径。
+   * @returns {void}
+   *
+   * 原因：header/sidebar 是从 src/components 注入的静态片段，片段内路径无法提前知道调用页面层级。
+   */
   function initPathObserver() {
-    // 每次公共组件 DOM 变化后修正静态资源和业务页面链接。
+    /**
+     * 修正公共组件里的静态资源和业务页链接。
+     * @returns {void}
+     *
+     * 原因：MutationObserver 会在 header/sidebar 注入后触发，dataset.fixed 防止同一链接被重复改写。
+     */
     function fixComponentPaths() {
       const pageMeta = getPageMeta();
       if (!pageMeta.rootPath && !pageMeta.pagesPath) return;

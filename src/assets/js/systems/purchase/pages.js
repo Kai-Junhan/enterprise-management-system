@@ -2,7 +2,13 @@
 
 window.purchaseSystem = window.purchaseSystem || {};
 
-// 采购管理页面控制器：负责采购总览、供应商、流程、跟踪和分析页。
+/**
+ * 采购管理页面控制器。
+ * 输入：purchaseSystem.store/actions/renderers 与 EnterpriseView。
+ * 输出：按当前 HTML 文件名初始化采购总览、供应商、流程、跟踪或分析页。
+ *
+ * 原因：采购域需要在多个静态页面间共享供应商和订单状态，集中初始化避免内联脚本重复实现。
+ */
 purchaseSystem.pages = (function(store, actions, renderers, view) {
   // 渲染采购管理首页的订单摘要行。
   function renderPurchaseIndexRow(item) {
@@ -77,7 +83,11 @@ purchaseSystem.pages = (function(store, actions, renderers, view) {
     `;
   }
 
-  // 创建采购月度分析行渲染器。
+  /**
+   * 创建采购月度分析行渲染器。
+   * @param {number} maxAmount 当前分析周期内最高采购额。
+   * @returns {Function} 接收月度数据并返回表格行 HTML 的渲染函数。
+   */
   function renderMonthlyAnalysisRow(maxAmount) {
     return (item) => {
       const barWidth = maxAmount ? Math.round((item.amount / maxAmount) * 100) : 0;
@@ -92,7 +102,11 @@ purchaseSystem.pages = (function(store, actions, renderers, view) {
     };
   }
 
-  // 创建供应商采购额占比行渲染器。
+  /**
+   * 创建供应商采购额占比行渲染器。
+   * @param {number} total 采购总额。
+   * @returns {Function} 接收供应商名称和金额元组并返回表格行 HTML 的渲染函数。
+   */
   function renderSupplierAmountRow(total) {
     return ([name, amount]) => {
       const percent = total ? ((amount / total) * 100).toFixed(1) : '0.0';
@@ -106,7 +120,11 @@ purchaseSystem.pages = (function(store, actions, renderers, view) {
     };
   }
 
-  // 汇总供应商采购额。
+  /**
+   * 汇总供应商采购额。
+   * @param {Array<Object>} orders 采购订单列表。
+   * @returns {Object<string, number>} 供应商名称到采购额的映射。
+   */
   function collectSupplierAmounts(orders) {
     return orders.reduce((result, item) => {
       result[item.supplierName] = (result[item.supplierName] || 0) + item.amount;

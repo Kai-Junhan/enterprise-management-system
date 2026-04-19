@@ -1,6 +1,12 @@
 'use strict';
 
-// 生产管理子系统的种子数据，localStorage 为空时用于初始化页面。
+/**
+ * 生产管理种子数据。
+ * 输入：由普通 script 标签在生产页面加载到全局作用域。
+ * 输出：productionSystem.store 在 localStorage 为空时复制计划、任务、物料、订单和质检记录。
+ *
+ * 原因：项目没有后端接口，种子数据负责保证清空浏览器数据后仍能展示完整业务闭环。
+ */
 const productionData = {
   plans: [
     { id: 'PP001', name: '2026年Q1生产计划', startDate: '2026-01-01', endDate: '2026-03-31', status: '进行中', products: ['产品A', '产品B'] },

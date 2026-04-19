@@ -2,7 +2,13 @@
 
 window.equipmentSystem = window.equipmentSystem || {};
 
-// 设备管理页面控制器：负责设备总览、监控、档案、维护和故障页。
+/**
+ * 设备管理页面控制器。
+ * 输入：equipmentSystem.store/actions/renderers 与 EnterpriseView。
+ * 输出：按当前 HTML 文件名初始化设备总览、状态监控、设备档案、维护计划或故障记录页。
+ *
+ * 原因：设备域多个子页面共用同一份本地状态，集中分发能避免页面内联脚本漂移。
+ */
 equipmentSystem.pages = (function(store, actions, renderers, view) {
   // 渲染设备管理首页的设备概览行。
   function renderEquipmentSummaryRow(item) {

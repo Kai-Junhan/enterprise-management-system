@@ -1,7 +1,12 @@
 ﻿'use strict';
 
 const employeeModule = (function(system) {
-  // 员工管理兼容入口，真实页面逻辑由 employeeSystem 负责。
+  /**
+   * 初始化员工管理兼容门面。
+   * @returns {void}
+   *
+   * 原因：页面加载器仍调用 window.employeeModule.init，真实实现已下沉到 employeeSystem。
+   */
   function init() {
     if (system && typeof system.init === 'function') {
       system.init();

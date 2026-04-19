@@ -2,7 +2,13 @@
 
 window.productionSystem = window.productionSystem || {};
 
-// 生产管理页面控制器：负责生产总览、库存、物料、订单、计划、质检和排产页。
+/**
+ * 生产管理页面控制器。
+ * 输入：productionSystem.store/actions/renderers 与 EnterpriseView。
+ * 输出：按当前 HTML 文件名初始化总览、库存、物料、订单、计划、质检或排程页。
+ *
+ * 原因：生产域页面展示维度多，但都读取同一份 localStorage 状态，集中初始化能保证刷新逻辑一致。
+ */
 productionSystem.pages = (function(store, actions, renderers, view) {
   // 渲染生产管理首页的任务行。
   function renderTaskRow(item) {

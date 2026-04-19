@@ -1,12 +1,18 @@
 'use strict';
 
-// 企业管理系统的浏览器本地存储封装：业务数据用 localStorage，会话用 sessionStorage。
+/**
+ * 浏览器存储封装。
+ * 输入：业务 key 和可 JSON 序列化的值。
+ * 输出：localStorage 持久数据和 sessionStorage 会话数据的统一读写 API。
+ *
+ * 原因：项目没有后端，业务演示数据必须在刷新后保留；登录态只保留在当前浏览器会话中。
+ */
 const storage = {
-  // 写入需要持久保留的业务演示数据。
+  /** @param {string} key 存储 key。@param {*} value 需要持久保存的业务数据。@returns {void} */
   set(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
   },
-  // 读取业务演示数据，解析失败时返回 null 以便回退到模拟数据。
+  /** @param {string} key 存储 key。@returns {*|null} 解析后的业务数据；解析失败返回 null。 */
   get(key) {
     try {
       return JSON.parse(localStorage.getItem(key));
@@ -14,21 +20,21 @@ const storage = {
       return null;
     }
   },
-  // 删除指定业务数据 key。
+  /** @param {string} key 存储 key。@returns {void} */
   remove(key) {
     localStorage.removeItem(key);
   },
-  // 清空全部持久业务数据。
+  /** @returns {void} 清空全部持久业务数据。 */
   clear() {
     localStorage.clear();
   },
 
   session: {
-    // 写入当前登录用户会话数据。
+    /** @param {string} key 会话 key。@param {*} value 当前登录用户会话数据。@returns {void} */
     set(key, value) {
       sessionStorage.setItem(key, JSON.stringify(value));
     },
-    // 读取当前会话数据，解析失败时视为未登录。
+    /** @param {string} key 会话 key。@returns {*|null} 解析后的会话数据；解析失败返回 null。 */
     get(key) {
       try {
         return JSON.parse(sessionStorage.getItem(key));
@@ -36,11 +42,11 @@ const storage = {
         return null;
       }
     },
-    // 删除指定会话数据。
+    /** @param {string} key 会话 key。@returns {void} */
     remove(key) {
       sessionStorage.removeItem(key);
     },
-    // 清空当前浏览器会话。
+    /** @returns {void} 清空当前浏览器会话。 */
     clear() {
       sessionStorage.clear();
     }

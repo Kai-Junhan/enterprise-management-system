@@ -3,7 +3,11 @@
 window.salesSystem = window.salesSystem || {};
 
 salesSystem.actions = (function(store) {
-  // 新增客户档案。
+  /**
+   * 新增客户档案。
+   * @param {Object} payload 客户表单数据。
+   * @returns {Object} 写入本地状态的新客户记录。
+   */
   function createCustomer(payload) {
     return store.mutate((state) => {
       const item = {
@@ -22,14 +26,22 @@ salesSystem.actions = (function(store) {
     });
   }
 
-  // 删除客户档案。
+  /**
+   * 删除客户档案。
+   * @param {string} id 客户编号。
+   * @returns {void}
+   */
   function deleteCustomer(id) {
     store.mutate((state) => {
       state.customers = state.customers.filter((item) => item.id !== id);
     });
   }
 
-  // 新增销售订单并计算订单金额。
+  /**
+   * 新增销售订单并计算订单金额。
+   * @param {Object} payload 销售订单表单数据。
+   * @returns {Object} 写入本地状态的新销售订单。
+   */
   function createOrder(payload) {
     return store.mutate((state) => {
       const quantity = Number(payload.quantity) || 0;
@@ -52,7 +64,11 @@ salesSystem.actions = (function(store) {
     });
   }
 
-  // 新增产品定价策略并计算折扣。
+  /**
+   * 新增产品定价策略并计算折扣。
+   * @param {Object} payload 定价策略表单数据。
+   * @returns {Object} 写入本地状态的新定价策略。
+   */
   function createPricing(payload) {
     return store.mutate((state) => {
       const standardPrice = Number(payload.standardPrice) || 0;

@@ -3,7 +3,11 @@
 window.purchaseSystem = window.purchaseSystem || {};
 
 purchaseSystem.actions = (function(store) {
-  // 新增供应商档案。
+  /**
+   * 新增供应商档案。
+   * @param {Object} payload 供应商表单数据。
+   * @returns {Object} 写入本地状态的新供应商记录。
+   */
   function createSupplier(payload) {
     return store.mutate((state) => {
       const item = {
@@ -21,14 +25,22 @@ purchaseSystem.actions = (function(store) {
     });
   }
 
-  // 删除供应商档案。
+  /**
+   * 删除供应商档案。
+   * @param {string} id 供应商编号。
+   * @returns {void}
+   */
   function deleteSupplier(id) {
     store.mutate((state) => {
       state.suppliers = state.suppliers.filter((item) => item.id !== id);
     });
   }
 
-  // 新增采购订单并计算订单金额。
+  /**
+   * 新增采购订单并计算订单金额。
+   * @param {Object} payload 采购订单表单数据。
+   * @returns {Object} 写入本地状态的新采购订单。
+   */
   function createOrder(payload) {
     return store.mutate((state) => {
       const quantity = Number(payload.quantity) || 0;

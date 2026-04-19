@@ -1,7 +1,12 @@
 ﻿'use strict';
 
 const equipmentModule = (function(system) {
-  // 设备管理兼容入口，真实页面逻辑由 equipmentSystem 负责。
+  /**
+   * 初始化设备管理兼容门面。
+   * @returns {void}
+   *
+   * 原因：页面加载器仍调用 window.equipmentModule.init，真实实现已下沉到 equipmentSystem。
+   */
   function init() {
     if (system && typeof system.init === 'function') {
       system.init();

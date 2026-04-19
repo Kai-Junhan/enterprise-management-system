@@ -1,6 +1,11 @@
 'use strict';
 const landing = (function() {
-  // 落地页锚点导航平滑滚动到目标展示区块。
+  /**
+   * 绑定落地页锚点平滑滚动。
+   * @returns {void}
+   *
+   * 原因：前台展示页使用单页锚点导航，阻止默认跳转可以保留平滑滚动体验。
+   */
   function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
@@ -13,7 +18,12 @@ const landing = (function() {
     });
   }
 
-  // 滚动后给顶部导航增加沉浸式背景，提升前台展示页层次。
+  /**
+   * 根据滚动位置切换落地页导航栏状态。
+   * @returns {void}
+   *
+   * 原因：首屏背景图较暗，滚动离开首屏后需要半透明背景提升导航可读性。
+   */
   function initNavbarScroll() {
     const navbar = document.getElementById('navbar');
     if (!navbar) return;
@@ -27,7 +37,10 @@ const landing = (function() {
     });
   }
 
-  // 控制落地页移动端菜单展开与链接点击后收起。
+  /**
+   * 控制落地页移动端菜单展开与收起。
+   * @returns {void}
+   */
   function initMobileMenu() {
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -38,7 +51,7 @@ const landing = (function() {
       mobileMenu.classList.toggle('active');
     });
     
-    // 点击菜单链接后关闭菜单，避免遮挡目标区块。
+    // 链接点击后收起菜单，避免移动端菜单遮挡滚动到的目标区块。
     document.querySelectorAll('.mobile-menu-nav a').forEach(link => {
       link.addEventListener('click', function() {
         mobileMenu.classList.remove('active');
@@ -46,12 +59,17 @@ const landing = (function() {
     });
   }
 
-  // 为企业介绍、产品卡片和合作伙伴标识添加进入视口动画。
+  /**
+   * 为落地页展示元素绑定进入视口动画。
+   * @returns {void}
+   *
+   * 原因：IntersectionObserver 能让动画只在元素接近视口时触发，减少首屏加载时的动画压力。
+   */
   function initAnimations() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
-          // 根据落地页内容类型应用对应动画节奏。
+          // 不同展示块使用不同动画节奏，保持统计、技术、产品和伙伴区的视觉层次。
           const element = entry.target;
           
           if (element.classList.contains('hero-container')) {
@@ -75,7 +93,7 @@ const landing = (function() {
             element.classList.add('slide-up');
           }
           
-          // 动画只触发一次，避免来回滚动导致重复闪烁。
+          // 动画只触发一次，避免用户来回滚动时重复闪烁。
           observer.unobserve(element);
         }
       });
@@ -84,14 +102,19 @@ const landing = (function() {
       rootMargin: '0px 0px -50px 0px'
     });
 
-    // 观察落地页各展示模块。
+    // 只观察落地页核心展示模块，避免把导航和页脚普通元素纳入动画队列。
     document.querySelectorAll('.hero-container, .stat-card, .tech-card, .product-card, .founder-card, .partner-logo, #cta').forEach(el => {
       observer.observe(el);
     });
   }
 
   return {
-    // 初始化落地页专属交互，不进入后台业务模块加载链路。
+    /**
+     * 初始化落地页专属交互。
+     * @returns {void}
+     *
+     * 原因：落地页不进入后台业务模块加载链路，脚本在页面底部直接运行。
+     */
     init: function() {
       initSmoothScroll();
       initNavbarScroll();
