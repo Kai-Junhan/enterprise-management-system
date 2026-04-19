@@ -1,12 +1,11 @@
 /**
- * Loader Page Styles
- * 加载动画页面样式
- *
- * @description 沉浸式加载动画，平滑过渡到落地页
+ * 加载页样式：进入落地页前展示品牌光效、粒子、文字和进度动画。
+ * 多个 fixed 层通过 z-index 分层，确保背景、粒子、中心内容和进度条互不遮挡。
  */
 
 /* =====================
    基础重置
+   加载页独立运行在首屏，重置盒模型并禁止滚动，避免动画期间页面露底。
    ===================== */
 *, *::before, *::after {
   margin: 0;
@@ -25,7 +24,8 @@ body {
 }
 
 /* =====================
-   背景层 - 深邃空间感
+   背景层
+   最底层 fixed 背景提供深色空间感，z-index 0 作为所有光效的基底。
    ===================== */
 .bg-layer {
   position: fixed;
@@ -34,7 +34,7 @@ body {
   z-index: 0;
 }
 
-/* 光线扫描效果 */
+/* 光线扫描层：覆盖全屏并使用 conic-gradient 旋转，z-index 1 位于背景之上。 */
 .light-sweep {
   position: fixed;
   inset: 0;
@@ -63,7 +63,7 @@ body {
   animation: lightRotate 8s linear infinite;
 }
 
-/* 网格背景 */
+/* 网格背景：双向线性渐变生成科技网格，mask 让边缘自然淡出；保留 -webkit 前缀兼容 Chromium/WebKit。 */
 .grid-bg {
   position: fixed;
   inset: 0;
@@ -79,7 +79,8 @@ body {
 }
 
 /* =====================
-   波纹扩散效果
+   波纹扩散
+   容器不接收鼠标事件，三层 ripple 依次扩散，位于背景层和中心光球之间。
    ===================== */
 .ripple-container {
   position: fixed;
@@ -114,6 +115,7 @@ body {
 
 /* =====================
    中心光球
+   使用 fixed 居中定位作为视觉焦点，before/after 分别负责核心亮光和外层光晕。
    ===================== */
 .center-orb {
   position: fixed;
@@ -147,6 +149,7 @@ body {
 
 /* =====================
    粒子系统
+   粒子层覆盖全屏且不拦截点击；前 20 个粒子从中心飞散，后 10 个持续漂浮。
    ===================== */
 .particles {
   position: fixed;
@@ -164,7 +167,7 @@ body {
   opacity: 0;
 }
 
-/* 从中心向外发散的粒子 */
+/* 飞散粒子：每个 nth-child 绑定独立轨迹，形成一次性爆发效果。 */
 .particle:nth-child(1)  { top: 50%; left: 50%; animation: particleFly1 2.5s ease-out 0.6s forwards; }
 .particle:nth-child(2)  { top: 50%; left: 50%; animation: particleFly2 2.5s ease-out 0.6s forwards; }
 .particle:nth-child(3)  { top: 50%; left: 50%; animation: particleFly3 2.5s ease-out 0.6s forwards; }
@@ -186,7 +189,7 @@ body {
 .particle:nth-child(19) { top: 50%; left: 50%; animation: particleFly19 2.5s ease-out 0.6s forwards; }
 .particle:nth-child(20) { top: 50%; left: 50%; animation: particleFly20 2.5s ease-out 0.6s forwards; }
 
-/* 悬浮粒子（持续漂浮） */
+/* 悬浮粒子：在加载期间循环漂浮，为静态背景补充细微运动。 */
 .float-particle {
   position: absolute;
   width: 3px;
@@ -209,6 +212,7 @@ body {
 
 /* =====================
    主内容区
+   内容层 z-index 10 高于所有装饰层，保证品牌文字、标语和分隔线始终可读。
    ===================== */
 .loader-content {
   position: relative;
@@ -219,7 +223,7 @@ body {
   gap: 40px;
 }
 
-/* 品牌文字 - 超大字号 */
+/* 品牌文字：clamp 控制字号范围，渐变文字依赖 background-clip，并保留 WebKit 前缀兼容。 */
 .loader-brand {
   font-size: clamp(48px, 8vw, 96px);
   font-weight: 800;
@@ -238,7 +242,7 @@ body {
   position: relative;
 }
 
-/* 文字光扫效果 */
+/* 文字光扫：伪元素横向扫过品牌文字，不增加额外 DOM。 */
 .loader-brand::after {
   content: '';
   position: absolute;
@@ -250,7 +254,7 @@ body {
   animation: textSweep 2s ease-in-out 1.5s forwards;
 }
 
-/* 副标题 */
+/* 副标题：使用大字距营造科技感，延迟出现形成品牌信息层级。 */
 .loader-tagline {
   font-size: clamp(14px, 2vw, 20px);
   color: rgba(255, 255, 255, 0.5);
@@ -261,7 +265,7 @@ body {
   animation: taglineReveal 0.8s cubic-bezier(0.25, 1, 0.5, 1) 1.2s forwards;
 }
 
-/* 分隔线 */
+/* 分隔线：横向展开连接品牌文字和底部标语。 */
 .loader-divider {
   width: 0;
   height: 1px;
@@ -269,7 +273,7 @@ body {
   animation: dividerExpand 1s cubic-bezier(0.25, 1, 0.5, 1) 1.5s forwards;
 }
 
-/* 底部标语 */
+/* 底部标语：低对比度显示，避免和品牌文字争夺视觉焦点。 */
 .loader-motto {
   font-size: clamp(12px, 1.5vw, 16px);
   color: rgba(255, 255, 255, 0.3);
@@ -280,6 +284,7 @@ body {
 
 /* =====================
    底部进度指示
+   固定在视口底部中央，tabular-nums 保证进度数字变化时宽度稳定。
    ===================== */
 .progress-container {
   position: fixed;
@@ -334,6 +339,7 @@ body {
 
 /* =====================
    退出动画
+   JS 为 loader-wrapper 添加 exit 后，各层分别淡出和缩放，过渡到落地页。
    ===================== */
 .loader-wrapper.exit .bg-layer {
   animation: bgExit 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -357,6 +363,7 @@ body {
 
 /* =====================
    动画关键帧
+   关键帧集中维护加载页所有进入、循环、进度和退出运动。
    ===================== */
 @keyframes lightSweepIn {
   from { opacity: 0; }
@@ -403,7 +410,7 @@ body {
   50% { transform: scale(1.3); opacity: 0.5; }
 }
 
-/* 粒子飞散动画 */
+/* 粒子飞散轨迹：保持单行定义，便于快速对照 20 个方向向量。 */
 @keyframes particleFly1  { 0% { opacity: 1; transform: translate(0, 0); } 100% { opacity: 0; transform: translate(-120px, -180px); } }
 @keyframes particleFly2  { 0% { opacity: 1; transform: translate(0, 0); } 100% { opacity: 0; transform: translate(150px, -160px); } }
 @keyframes particleFly3  { 0% { opacity: 1; transform: translate(0, 0); } 100% { opacity: 0; transform: translate(-180px, 100px); } }
@@ -425,7 +432,7 @@ body {
 @keyframes particleFly19 { 0% { opacity: 1; transform: translate(0, 0); } 100% { opacity: 0; transform: translate(-40px, 200px); } }
 @keyframes particleFly20 { 0% { opacity: 1; transform: translate(0, 0); } 100% { opacity: 0; transform: translate(220px, -40px); } }
 
-/* 悬浮粒子动画 */
+/* 悬浮粒子轨迹：循环动画只改变透明度和位移，避免触发布局重排。 */
 @keyframes float1  { 0%, 100% { opacity: 0; transform: translate(0, 0); } 50% { opacity: 0.8; transform: translate(20px, -30px); } }
 @keyframes float2  { 0%, 100% { opacity: 0; transform: translate(0, 0); } 50% { opacity: 0.6; transform: translate(-15px, 25px); } }
 @keyframes float3  { 0%, 100% { opacity: 0; transform: translate(0, 0); } 50% { opacity: 0.7; transform: translate(25px, 20px); } }
@@ -485,7 +492,7 @@ body {
   to { width: 100%; }
 }
 
-/* 退出动画 */
+/* 退出关键帧：不同层使用不同 blur 和 scale，形成向落地页收束的层次感。 */
 @keyframes bgExit {
   from { opacity: 1; }
   to { opacity: 0; filter: blur(20px); }
@@ -511,7 +518,7 @@ body {
   to { opacity: 0; }
 }
 
-/* 移动端适配 */
+/* 移动端波纹：缩小 ripple 终点尺寸，避免小屏上扩散范围过大造成性能压力。 */
 @media (max-width: 768px) {
   .ripple:nth-child(n) {
     animation-name: rippleExpandMobile;

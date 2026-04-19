@@ -1,10 +1,10 @@
-/* 1. 基础样式 base */
+/* 基础层：先加载重置、主题变量、排版和通用动画，保证后续组件可以复用统一令牌。 */
 @import './base/reset.css';
 @import './base/variables.css';
 @import './base/typography.css';
 @import './base/animations.css';
 
-/* 2. 组件样式 components */
+/* 组件层：公共导航、侧边栏、表单、表格和弹窗在页面样式之前完成基础定义。 */
 @import './components/header.css';
 @import './components/sidebar.css';
 @import './components/button.css';
@@ -13,7 +13,7 @@
 @import './components/card.css';
 @import './components/modal.css';
 
-/* 3. 页面样式  pages*/
+/* 页面层：业务页和展示页最后加载，用于承接页面级布局与必要覆盖。 */
 @import './pages/login.css';
 @import './pages/production.css';
 @import './pages/sales.css';
@@ -23,15 +23,16 @@
 @import './pages/employee.css';
 @import './pages/landing.css';
 
-/* 4. 动画样式 */
-/* @keyframes：CSS用来创建动画的规则 */
+/* 组件异步加载过渡：header/sidebar 注入后使用轻量淡入，避免公共组件闪现。 */
 @keyframes componentFadeIn {
-  from { opacity: 0; } /* 透明度为0% */
-  to { opacity: 1; } /* 透明度为100% */
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* =====================
-   自定义鼠标跟随动画
+   自定义鼠标
+   固定定位让光标跟随视口坐标，pointer-events 保证它不阻挡页面点击。
+   z-index 高于所有业务层级；移动端隐藏，避免触屏设备出现多余指针。
    ===================== */
 .custom-cursor {
   position: fixed;
@@ -39,18 +40,16 @@
   left: 0;
   width: 20px;
   height: 20px;
-  border: 2px solid var(--color-primary);  /* 像素为2的实线边框 */
-
-  border-radius: 50%;  /* 把四个角拉成圆 看起来像个圆环 */
-  pointer-events: none;  /* 不会拦截鼠标事件 */
+  border: 2px solid var(--color-primary);
+  border-radius: 50%;
+  pointer-events: none;
   transform: translate(-50%, -50%);
-  z-index: 99999;  /* 置顶自定义鼠标 */
-  /* transition：过渡动画，让变化更平滑 */
+  z-index: 99999;
   transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
               height 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
               background-color 0.3s cubic-bezier(0.25, 1, 0.5, 1),
               opacity 0.3s;
-  mix-blend-mode: difference;  /* 混合模式：不同背景上产生反差感 */
+  mix-blend-mode: difference;
 }
 
 .custom-cursor.hover {
@@ -61,7 +60,7 @@
   border-color: transparent;
 }
 
-/* 小白点中心 */
+/* 光标中心点：hover 态隐藏中心点，保留外圈扩张反馈。 */
 .custom-cursor::after {
   content: '';
   position: absolute;
@@ -75,15 +74,13 @@
   transition: opacity 0.2s;
 }
 
-/*为自定义鼠标元素 再额外创建一个“中心小圆点”*/
 .custom-cursor.hover::after {
   opacity: 0;
 }
 
-/*媒体查询：适配移动端*/
+/* 移动端触屏交互不需要自定义光标，隐藏后也避免遮挡点击目标。 */
 @media (max-width: 768px) {
-  /*选中所有类名为custom-cursor的元素*/
   .custom-cursor {
-    display: none; /* 移动端隐藏自定义鼠标 */
+    display: none;
   }
 }

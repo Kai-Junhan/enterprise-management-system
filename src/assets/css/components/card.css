@@ -1,3 +1,4 @@
+/* 基础卡片：承载业务表格外壳、概览区域和内容面板的统一容器。 */
 .card {
   background: var(--color-bg-white);
   border-radius: var(--border-radius);
@@ -10,6 +11,7 @@
   box-shadow: var(--shadow-md);
 }
 
+/* 卡片头部：标题与操作入口左右分布，底部分隔线保持面板层次。 */
 .card-header {
   display: flex;
   align-items: center;
@@ -29,7 +31,7 @@
   color: var(--color-text-secondary);
 }
 
-/* 统计卡片 */
+/* 统计卡片：业务首页和仪表盘用图标、数值、标签组成快速入口或指标卡。 */
 .stat-card {
   background: var(--color-bg-white);
   border-radius: var(--border-radius);
@@ -72,7 +74,7 @@
   margin-top: 2px;
 }
 
-/* 技术卡片 */
+/* 技术卡片：落地页技术能力区使用相对定位，伪元素光扫层放在内容下方。 */
 .tech-card {
   background: var(--color-bg-white);
   border-radius: var(--border-radius-lg);
@@ -110,6 +112,7 @@
   left: 100%;
 }
 
+/* 技术卡片内容层：所有直接子元素抬到 z-index 1，避免被光扫伪元素覆盖。 */
 .tech-card > * {
   position: relative;
   z-index: 1;
@@ -124,7 +127,7 @@
   margin-right: auto;
 }
 
-/* 产品卡片 */
+/* 产品卡片：落地页产品服务区使用大面积渐变伪元素制造悬停动势。 */
 .product-card {
   background: white;
   border-radius: var(--border-radius-lg);
@@ -163,6 +166,7 @@
   left: -30%;
 }
 
+/* 产品卡片内容层：内容固定在渐变装饰层之上，保持文字和图片可读。 */
 .product-card > * {
   position: relative;
   z-index: 1;
@@ -176,7 +180,7 @@
   margin-bottom: 24px;
 }
 
-/* 创始人卡片 */
+/* 创始人卡片：创始人板块使用底部进度线式 hover，突出人物卡片可交互感。 */
 .founder-card {
   background: var(--color-bg-white);
   border-radius: var(--border-radius-lg);
@@ -229,6 +233,7 @@
   display: none;
 }
 
+/* 创始人图片兜底：有真实 src 时显示图片并隐藏占位符，避免空图标破坏卡片布局。 */
 .founder-photo[src]:not([src=""]) {
   display: block;
 }

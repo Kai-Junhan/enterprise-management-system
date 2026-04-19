@@ -1,4 +1,4 @@
-/* 异步加载时的骨架占位 */
+/* 头部占位层：组件异步注入前固定占住顶部空间，z-index 与真实头部一致防止内容上跳。 */
 #header-placeholder:empty {
   position: fixed;
   top: 0;
@@ -11,6 +11,7 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* 后台系统头部：固定在视口顶部，业务页面通过 --header-height 预留内容区域。 */
 .header {
   position: fixed;
   top: 0;
@@ -27,10 +28,12 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* 头部内容淡入：配合 shell 动态加载公共组件，降低 DOM 注入时的闪烁感。 */
 .header > * {
   animation: componentFadeIn 0.3s ease-out forwards;
 }
 
+/* 后台头部品牌与用户区：承载 logo、系统名、用户头像和退出入口。 */
 .header-logo {
   display: flex;
   align-items: center;
@@ -76,8 +79,7 @@
   font-weight: 600;
 }
 
-/* ========== 移动端响应式样式 ========== */
-/* 汉堡菜单按钮 - 桌面端默认隐藏 */
+/* 后台移动端菜单按钮：桌面端隐藏，移动端通过 active 态变成关闭图标。 */
 .hamburger-btn {
   display: none;
   flex-direction: column;
@@ -100,8 +102,8 @@
   transition: all 0.3s ease;
 }
 
+/* 后台移动端头部：显示汉堡按钮，收起品牌名和用户名给操作区留空间。 */
 @media (max-width: 768px) {
-  /* 移动端显示汉堡菜单按钮 */
   .hamburger-btn {
     display: flex;
   }
@@ -122,23 +124,20 @@
     transform: rotate(-45deg) translate(5px, -5px);
   }
 
-  /* 移动端隐藏品牌名称 */
   .header-logo .brand-name {
     display: none;
   }
 
-  /* 调整header右侧间距 */
   .header-right {
     gap: var(--spacing-sm);
   }
 
-  /* 用户名可选择性隐藏 */
   .header-user .username {
     display: none;
   }
 }
 
-/* 落地页导航栏样式 */
+/* 落地页导航栏：独立于后台 header，固定顶部并支持滚动后的毛玻璃状态。 */
 #navbar {
   position: fixed;
   top: 0;
@@ -151,6 +150,7 @@
   transition: all 0.3s ease;
 }
 
+/* 落地页导航容器：内容宽度由 HTML 中的 container 控制，导航内部保持水平分布。 */
 .navbar-container {
   display: flex;
   justify-content: space-between;
@@ -158,6 +158,7 @@
   height: 60px;
 }
 
+/* 落地页品牌区：logo 和品牌名作为首页锚点，hover 使用轻微缩放强调可点击。 */
 .navbar-brand {
   display: flex;
   align-items: center;
@@ -177,7 +178,7 @@
   height: 36px;
 }
 
-/* 桌面导航 */
+/* 桌面导航链接：使用伪元素生成下划线，避免在 HTML 中增加装饰节点。 */
 .navbar-nav {
   display: flex;
   gap: 32px;
@@ -211,13 +212,13 @@
   width: 100%;
 }
 
+/* 落地页导航操作区：登录注册按钮在导航内固定尺寸，避免文案长短造成抖动。 */
 .navbar-actions {
   display: flex;
   gap: 16px;
   align-items: center;
 }
 
-/* 导航栏按钮统一样式 */
 .navbar-actions .btn {
   display: inline-flex;
   align-items: center;
@@ -261,14 +262,14 @@
   transform: translateY(-2px);
 }
 
-/* 滚动效果 */
+/* 滚动态导航：landing.js 添加该类后启用半透明背景和模糊，保证首屏滚动后可读。 */
 .navbar-scrolled {
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.95);
   box-shadow: var(--shadow-md);
 }
 
-/* 移动端菜单按钮 */
+/* 落地页移动菜单按钮：窄屏隐藏桌面导航后显示。 */
 .mobile-menu-btn {
   display: none;
   background: none;
@@ -286,7 +287,7 @@
   color: var(--color-primary);
 }
 
-/* 移动端导航菜单 */
+/* 落地页移动菜单：固定在导航下方，active 类控制显示，z-index 低于后台抽屉层。 */
 .mobile-menu {
   display: none;
   position: fixed;
@@ -304,6 +305,7 @@
   display: block;
 }
 
+/* 移动菜单内容：链接与操作按钮纵向排列，适配单手触控点击。 */
 .mobile-menu-nav {
   display: flex;
   flex-direction: column;
@@ -334,6 +336,7 @@
   width: 100%;
 }
 
+/* 落地页移动菜单入场动画：只服务导航下拉，不影响 base/animations 的通用 slideDown。 */
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -345,7 +348,7 @@
   }
 }
 
-/* 响应式适配 */
+/* 落地页移动端导航切换：隐藏桌面链接和按钮，保留菜单入口。 */
 @media (max-width: 768px) {
   .navbar-nav {
     display: none;

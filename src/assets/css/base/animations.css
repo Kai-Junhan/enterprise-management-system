@@ -1,5 +1,6 @@
 /* =====================
-   动画关键帧
+   通用进入与退出动画
+   这些关键帧服务落地页、业务卡片和页面切换，不绑定具体业务域。
    ===================== */
 @keyframes fadeIn {
   from {
@@ -91,7 +92,8 @@
 }
 
 /* =====================
-   动画辅助类
+   动画工具类
+   JS 只负责给元素追加类名，具体运动轨迹和时长集中在 CSS 中维护。
    ===================== */
 .fade-in {
   animation: fadeIn 0.6s ease forwards;
@@ -121,7 +123,7 @@
   animation: pageOut 0.7s ease forwards;
 }
 
-/* 动画延迟类 */
+/* 动画延迟：覆盖 landing.js 动态生成的 delay-0 到 delay-800，保证分组入场节奏完整。 */
 .delay-0 {
   animation-delay: 0s;
 }
@@ -158,7 +160,7 @@
   animation-delay: 0.8s;
 }
 
-/* 自定义鼠标动画 */
+/* 展示特效关键帧：为打字光标、进度条、光扫、网格和卡片入场提供复用动画。 */
 @keyframes cursorBlink {
   0%, 50% {
     border-right-color: rgba(215, 181, 109, 0.95);
