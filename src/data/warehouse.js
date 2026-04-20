@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * 仓储管理种子数据。
+ * 输入：由普通 script 标签在仓储页面加载到全局作用域。
+ * 输出：warehouseSystem.store 在 localStorage 为空时复制库存、入库、出库和货位记录。
+ *
+ * 原因：项目没有后端接口，种子数据负责保证清空浏览器数据后仍能展示完整业务闭环。
+ */
 const warehouseData = {
   inventory: [
     { id: 'W001', name: '产品A成品', category: '成品', spec: '标准型', unit: '件', stock: 320, minStock: 100, location: 'A-01-01', lastUpdate: '2026-03-18' },

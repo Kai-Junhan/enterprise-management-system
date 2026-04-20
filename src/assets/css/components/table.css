@@ -1,3 +1,4 @@
+/* 表格外壳：桌面端允许横向滚动，避免宽业务表格挤压页面主体。 */
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
@@ -6,6 +7,7 @@
   background: var(--color-bg-white);
 }
 
+/* 表格主体：统一业务列表的字号、表头、单元格边框和 hover 反馈。 */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -40,12 +42,13 @@
   background: var(--color-primary-bg);
 }
 
+/* 行内操作区：编辑、删除、查看等按钮保持紧凑排列。 */
 .table-actions {
   display: flex;
   gap: var(--spacing-xs);
 }
 
-/* 状态标签 */
+/* 状态标签：业务状态、风险等级和分类标记共用小胶囊样式。 */
 .badge {
   display: inline-block;
   padding: 2px 8px;
@@ -60,29 +63,24 @@
 .badge-info { background: #e6f7ff; color: var(--color-info); }
 .badge-default { background: var(--color-bg); color: var(--color-text-secondary); }
 
-/* ========== 移动端响应式样式 - 卡片视图 ========== */
+/* 移动端卡片表格：隐藏表头并用 td[data-label] 显示列名，提升窄屏可读性。 */
 @media (max-width: 768px) {
-  /* 隐藏表头 */
   .table thead {
     display: none;
   }
 
-  /* 表格包装器去除横向滚动 */
   .table-wrapper {
     overflow-x: visible;
   }
 
-  /* 表格显示为块级 */
   .table {
     display: block;
   }
 
-  /* 表格主体显示为块级 */
   .table tbody {
     display: block;
   }
 
-  /* 每行显示为卡片 */
   .table tbody tr {
     display: block;
     margin-bottom: var(--spacing-md);
@@ -97,12 +95,10 @@
     margin-bottom: 0;
   }
 
-  /* 取消行内hover背景 */
   .table tbody tr:hover {
     background: var(--color-bg-white);
   }
 
-  /* 每个单元格堆叠显示 */
   .table td {
     display: flex;
     justify-content: space-between;
@@ -116,7 +112,6 @@
     border-bottom: none;
   }
 
-  /* 使用data-label属性显示列名 */
   .table td::before {
     content: attr(data-label);
     font-weight: 600;
@@ -127,7 +122,6 @@
     flex-shrink: 0;
   }
 
-  /* 操作按钮容器 */
   .table td .table-actions {
     flex-wrap: wrap;
     justify-content: flex-end;

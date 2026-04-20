@@ -1,3 +1,4 @@
+/* 登录注册页整体框架：左右分栏承载品牌展示和表单，移动端切换为上下结构。 */
 .login-page {
   min-height: 100vh;
   display: flex;
@@ -7,15 +8,17 @@
   flex-direction: row;
 }
 
+/* 移动端认证页：品牌区和表单区纵向排列，避免横向压缩表单。 */
 @media (max-width: 768px) {
   .login-page {
     flex-direction: column;
   }
 }
 
+/* 品牌展示区：背景图铺满左侧，伪元素光斑强化小麦橙品牌氛围。 */
 .login-side {
   flex: 1;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  background: url('../../images/landing-bg.jpg') center center / cover no-repeat;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -27,6 +30,7 @@
   box-shadow: inset -10px 0 20px rgba(0,0,0,0.2);
 }
 
+/* 背景光斑：absolute 装饰层位于品牌内容下方，只服务视觉层次。 */
 .login-side::before {
   content: '';
   position: absolute;
@@ -49,12 +53,20 @@
   left: -100px;
 }
 
+/* 品牌内容：z-index 抬高到光斑之上，保证 logo 与文案可读。 */
 .login-side-content {
   z-index: 1;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
+
 .login-side-content img {
+  width: 150px;
+  height: auto;
   filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
 }
 
@@ -67,10 +79,11 @@
 
 .login-side-content p {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(0, 0, 0, 0.6);
   line-height: 1.6;
 }
 
+/* 表单区：右侧白底居中承载登录和注册表单。 */
 .login-form-container {
   flex: 1;
   display: flex;
@@ -80,6 +93,7 @@
   background: var(--color-bg-white);
 }
 
+/* 表单卡片：限制最大宽度，保证桌面端表单不会过宽。 */
 .login-box {
   width: 100%;
   max-width: 380px;
@@ -93,6 +107,7 @@
   text-align: center;
 }
 
+/* 认证页主按钮：占满表单宽度，阴影使用品牌色强调主要动作。 */
 .login-box .btn-primary {
   width: 100%;
   padding: 12px;
@@ -105,6 +120,7 @@
   transform: translateY(2px);
 }
 
+/* 底部辅助入口：登录注册切换链接保持轻量但可识别。 */
 .login-footer {
   text-align: center;
   margin-top: var(--spacing-xl);

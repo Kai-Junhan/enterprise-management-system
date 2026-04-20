@@ -1,7 +1,9 @@
+/* 表单分组：业务新增、编辑弹窗和筛选表单共享纵向间距。 */
 .form-group {
   margin-bottom: var(--spacing-md);
 }
 
+/* 表单标签：required 通过伪元素追加星号，避免每个 HTML 标签手写必填标记。 */
 .form-label {
   display: block;
   font-size: var(--font-size-base);
@@ -15,6 +17,7 @@
   color: var(--color-danger);
 }
 
+/* 表单控件：输入框、下拉框和文本域统一边框、焦点阴影和禁用态。 */
 .form-control {
   width: 100%;
   padding: 8px var(--spacing-sm);
@@ -45,6 +48,7 @@ select.form-control {
   cursor: pointer;
 }
 
+/* 表单提示：hint 展示辅助说明，error 展示校验失败信息。 */
 .form-hint {
   font-size: var(--font-size-sm);
   color: var(--color-text-disabled);
@@ -61,6 +65,7 @@ select.form-control {
   border-color: var(--color-danger);
 }
 
+/* 表单布局：多字段表单使用自适应网格，底部操作按钮右对齐。 */
 .form-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

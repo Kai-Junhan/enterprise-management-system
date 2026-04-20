@@ -10,7 +10,7 @@
   <div class="login-page">
     <div class="login-side">
       <div class="login-side-content fade-in">
-        <img src="../assets/images/logo.png" alt="小麦科技" style="height:80px; margin-bottom:24px;">
+        <img src="../assets/images/logo.png" alt="小麦科技" style="margin-bottom:24px;">
         <h1>小麦科技企业管理平台</h1>
         <p>连接数据，创造价值，让管理触手可及。</p>
       </div>
@@ -39,41 +39,6 @@
       </div>
     </div>
   </div>
-
-  <script src="../assets/js/utils/storage.js"></script>
-  <script src="../assets/js/utils/validate.js"></script>
-  <script src="../assets/js/modules/auth.js"></script>
-  <script>
-    'use strict';
-    // 已登录则直接跳转
-    if (auth.isLoggedIn()) {
-      window.location.href = 'dashboard.html';
-    }
-
-    document.getElementById('login-form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value;
-
-      document.getElementById('username-error').textContent = '';
-      document.getElementById('password-error').textContent = '';
-      document.getElementById('login-error').textContent = '';
-
-      if (!username) {
-        document.getElementById('username-error').textContent = '请输入用户名';
-        return;
-      }
-      if (!password) {
-        document.getElementById('password-error').textContent = '请输入密码';
-        return;
-      }
-
-      if (auth.login(username, password)) {
-        window.location.href = 'dashboard.html';
-      } else {
-        document.getElementById('login-error').textContent = '用户名或密码错误';
-      }
-    });
-  </script>
+<script src="../assets/js/main.js"></script>
 </body>
 </html>

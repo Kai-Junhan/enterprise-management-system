@@ -10,106 +10,110 @@
 
 'use strict';
 
+const storageMemory = {
+  local: {},
+  session: {}
+};
+
+function serialize(value) {
+  return JSON.stringify(value);
+}
+
+function parse(value) {
+  if (!value) return null;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return null;
+  }
+}
+
+function getStorageArea(name) {
+  try {
+    return window[name];
+  } catch {
+    return null;
+  }
+}
+
+function canUseStorage(area) {
+  try {
+    if (!area) return false;
+    const key = '__xm_storage_test__';
+    area.setItem(key, '1');
+    area.removeItem(key);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function getCookie(key) {
+  const encodedKey = encodeURIComponent(key) + '=';
+  const item = document.cookie
+    .split(';')
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(encodedKey));
+  return item ? decodeURIComponent(item.slice(encodedKey.length)) : null;
+}
+
+function setCookie(key, value) {
+  document.cookie = encodeURIComponent(key) + '=' + encodeURIComponent(value) + '; path=/; SameSite=Lax';
+}
+
+function removeCookie(key) {
+  document.cookie = encodeURIComponent(key) + '=; path=/; max-age=0; SameSite=Lax';
+}
+
 /**
- * storage对象 - 封装了localStorage和sessionStorage的操作
- * 使用对象的形式组织，让代码更清晰易用
+ * 浏览器存储封装。
+ * 输入：业务 key 和可 JSON 序列化的值。
+ * 输出：localStorage 持久数据和 sessionStorage 会话数据的统一读写 API。
+ *
+ * 原因：项目没有后端，业务演示数据必须在刷新后保留；登录态只保留在当前浏览器会话中。
  */
 const storage = {
-  /**
-   * 保存数据到localStorage（永久存储）
-   * 
-   * 功能：将任意JavaScript数据保存到浏览器的本地存储中
-   * 
-   * @param {string} key - 数据的键名（标识符），相当于"文件名"
-   * @param {any} value - 要保存的数据，可以是字符串、数字、对象、数组等
-   * 
-   * 使用示例：
-   *   storage.set('username', '张三');
-   *   storage.set('userInfo', { name: '张三', age: 20 });
-   *   storage.set('shoppingCart', ['苹果', '香蕉']);
-   * 
-   * 实现原理：
-   *   1. localStorage只能存储字符串
-   *   2. 使用JSON.stringify()将任意数据转换为JSON字符串
-   *   3. 例如：{name: '张三'} → '{"name":"张三"}'
-   * 
-   * 注意：
-   *   - 如果key已存在，会覆盖旧值
-   *   - 存储空间有限（通常5-10MB）
-   */
+  /** @param {string} key 存储 key。@param {*} value 需要持久保存的业务数据。@returns {void} */
   set(key, value) {
-    // JSON.stringify将JavaScript值转换为JSON字符串
-    // 这样对象、数组等复杂数据也能存储
-    localStorage.setItem(key, JSON.stringify(value));
-  },
-
-  /**
-   * 从localStorage读取数据
-   * 
-   * 功能：根据键名获取之前保存的数据
-   * 
-   * @param {string} key - 要读取的数据的键名
-   * @returns {any} 返回保存的数据，如果key不存在或解析失败返回null
-   * 
-   * 使用示例：
-   *   const username = storage.get('username');  // '张三'
-   *   const userInfo = storage.get('userInfo');  // { name: '张三', age: 20 }
-   * 
-   * 实现原理：
-   *   1. 从localStorage获取JSON字符串
-   *   2. 使用JSON.parse()将字符串转回JavaScript数据
-   *   3. 例如：'{"name":"张三"}' → {name: '张三'}
-   * 
-   * 边界情况处理：
-   *   - 如果key不存在，localStorage.getItem返回null
-   *   - 如果JSON解析失败（数据损坏），catch块捕获错误返回null
-   *   - 使用try-catch防止程序崩溃
-   */
-  get(key) {
-    try {
-      // 尝试获取并解析数据
-      // JSON.parse将JSON字符串转回JavaScript对象/值
-      return JSON.parse(localStorage.getItem(key));
-    } catch {
-      // 如果解析出错（如数据被手动修改损坏），返回null
-      // 不抛出错误，让程序继续正常运行
-      return null;
+    const serialized = serialize(value);
+    storageMemory.local[key] = serialized;
+    const area = getStorageArea('localStorage');
+    if (canUseStorage(area)) {
+      area.setItem(key, serialized);
+      return;
     }
+    setCookie('local_' + key, serialized);
   },
-
-  /**
-   * 删除localStorage中的指定数据
-   * 
-   * 功能：根据键名删除对应的数据
-   * 
-   * @param {string} key - 要删除的数据的键名
-   * 
-   * 使用示例：
-   *   storage.remove('username');  // 删除username这个数据
-   * 
-   * 注意：
-   *   - 如果key不存在，不会报错，什么都不做
-   *   - 只删除指定的key，其他数据不受影响
-   */
+  /** @param {string} key 存储 key。@returns {*|null} 解析后的业务数据；解析失败返回 null。 */
+  get(key) {
+    const area = getStorageArea('localStorage');
+    if (canUseStorage(area)) {
+      return parse(area.getItem(key));
+    }
+    return parse(storageMemory.local[key]) || parse(getCookie('local_' + key));
+  },
+  /** @param {string} key 存储 key。@returns {void} */
   remove(key) {
-    localStorage.removeItem(key);
+    delete storageMemory.local[key];
+    const area = getStorageArea('localStorage');
+    if (canUseStorage(area)) {
+      area.removeItem(key);
+    }
+    removeCookie('local_' + key);
   },
-
-  /**
-   * 清空所有localStorage数据
-   * 
-   * 功能：删除当前网站在localStorage中的所有数据
-   * 
-   * 使用示例：
-   *   storage.clear();  // 清空所有存储的数据
-   * 
-   * 警告：
-   *   - 这会删除所有数据，无法恢复！
-   *   - 使用时要非常小心
-   *   - 通常用于"退出登录并清除所有缓存"的场景
-   */
+  /** @returns {void} 清空全部持久业务数据。 */
   clear() {
-    localStorage.clear();
+    document.cookie.split(';').forEach((part) => {
+      const key = decodeURIComponent(part.split('=')[0].trim());
+      if (key.startsWith('local_')) {
+        removeCookie(key);
+      }
+    });
+    storageMemory.local = {};
+    const area = getStorageArea('localStorage');
+    if (canUseStorage(area)) {
+      area.clear();
+    }
   },
 
   /**
@@ -124,51 +128,42 @@ const storage = {
    *   - 不需要长期保存的信息
    */
   session: {
-    /**
-     * 保存数据到sessionStorage
-     * 
-     * @param {string} key - 数据的键名
-     * @param {any} value - 要保存的数据
-     * 
-     * 使用示例：
-     *   storage.session.set('tempData', { step: 1 });
-     */
+    /** @param {string} key 会话 key。@param {*} value 当前登录用户会话数据。@returns {void} */
     set(key, value) {
-      // 使用sessionStorage而不是localStorage
-      sessionStorage.setItem(key, JSON.stringify(value));
-    },
-
-    /**
-     * 从sessionStorage读取数据
-     * 
-     * @param {string} key - 要读取的数据的键名
-     * @returns {any} 返回保存的数据，如果不存在返回null
-     * 
-     * 使用示例：
-     *   const tempData = storage.session.get('tempData');
-     */
-    get(key) {
-      try {
-        return JSON.parse(sessionStorage.getItem(key));
-      } catch {
-        return null;
+      const serialized = serialize(value);
+      storageMemory.session[key] = serialized;
+      const area = getStorageArea('sessionStorage');
+      if (canUseStorage(area)) {
+        area.setItem(key, serialized);
+        return;
       }
+      setCookie(key, serialized);
     },
-
-    /**
-     * 删除sessionStorage中的指定数据
-     * 
-     * @param {string} key - 要删除的数据的键名
-     */
+    /** @param {string} key 会话 key。@returns {*|null} 解析后的会话数据；解析失败返回 null。 */
+    get(key) {
+      const area = getStorageArea('sessionStorage');
+      if (canUseStorage(area)) {
+        return parse(area.getItem(key));
+      }
+      return parse(storageMemory.session[key]) || parse(getCookie(key));
+    },
+    /** @param {string} key 会话 key。@returns {void} */
     remove(key) {
-      sessionStorage.removeItem(key);
+      delete storageMemory.session[key];
+      const area = getStorageArea('sessionStorage');
+      if (canUseStorage(area)) {
+        area.removeItem(key);
+      }
+      removeCookie(key);
     },
-
-    /**
-     * 清空所有sessionStorage数据
-     */
+    /** @returns {void} 清空当前浏览器会话。 */
     clear() {
-      sessionStorage.clear();
+      Object.keys(storageMemory.session).forEach((key) => removeCookie(key));
+      storageMemory.session = {};
+      const area = getStorageArea('sessionStorage');
+      if (canUseStorage(area)) {
+        area.clear();
+      }
     }
   }
 };

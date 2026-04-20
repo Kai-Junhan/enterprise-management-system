@@ -1,4 +1,4 @@
-/* 异步加载时的骨架占位 */
+/* 侧边栏占位层：组件异步注入前占住左侧区域，避免业务内容加载时横向跳动。 */
 #sidebar-placeholder:empty {
   position: fixed;
   top: var(--header-height);
@@ -9,6 +9,7 @@
   z-index: 101;
 }
 
+/* 后台侧边栏：固定在头部下方，z-index 略高于 header 占位以覆盖业务滚动内容。 */
 .sidebar {
   position: fixed;
   top: var(--header-height);
@@ -21,6 +22,7 @@
   padding: var(--spacing-md) 0;
 }
 
+/* 导航分组：业务域菜单使用分组标题和可激活条目表达当前模块位置。 */
 .sidebar-nav {
   padding: 0;
   animation: componentFadeIn 0.3s ease-out forwards;
@@ -69,24 +71,22 @@
   text-align: center;
 }
 
-/* ========== 移动端响应式样式 ========== */
+/* 移动端抽屉侧边栏：默认移出视口，open 类滑入；遮罩层独立控制点击关闭区域。 */
 @media (max-width: 768px) {
-  /* 侧边栏默认隐藏在屏幕左侧 */
   .sidebar {
     transform: translateX(-100%);
     transition: transform 0.3s ease;
     z-index: 1001;
+    width: min(82vw, var(--sidebar-width));
   }
 
-  /* 侧边栏展开状态 */
   .sidebar.open {
     transform: translateX(0);
   }
 
-  /* 遮罩层样式 */
   .sidebar-overlay {
     position: fixed;
-    top: 0;
+    top: var(--header-height);
     left: 0;
     right: 0;
     bottom: 0;
@@ -102,7 +102,6 @@
     visibility: visible;
   }
 
-  /* 占位符也需要适配移动端 */
   #sidebar-placeholder:empty {
     transform: translateX(-100%);
     transition: transform 0.3s ease;

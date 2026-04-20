@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * 员工管理种子数据。
+ * 输入：由普通 script 标签在员工页面加载到全局作用域。
+ * 输出：employeeSystem.store 在 localStorage 为空时复制这些员工、考勤、招聘和绩效记录。
+ *
+ * 原因：项目没有后端接口，种子数据负责保证清空浏览器数据后仍能展示完整业务闭环。
+ */
 const employeeData = {
   employees: [
     { id: 'E001', name: '张伟', gender: '男', dept: '技术部', position: '前端工程师', phone: '13800001001', email: 'zhangwei@xiaomai.com', entryDate: '2023-03-15', salary: 18000, status: '在职' },

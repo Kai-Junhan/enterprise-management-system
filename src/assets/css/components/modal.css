@@ -1,3 +1,4 @@
+/* 弹窗遮罩层：fixed + inset 覆盖整屏，z-index 低于移动导航高层级但高于业务内容。 */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -11,11 +12,13 @@
   transition: opacity 0.2s ease;
 }
 
+/* 弹窗显示态：通过 opacity 和 pointer-events 切换可见性，避免隐藏弹窗拦截点击。 */
 .modal-overlay.active {
   opacity: 1;
   pointer-events: all;
 }
 
+/* 弹窗主体：限制最大宽度和视口高度，长表单在弹窗内部滚动。 */
 .modal {
   background: var(--color-bg-white);
   border-radius: var(--border-radius-lg);
@@ -32,6 +35,7 @@
   transform: translateY(0);
 }
 
+/* 弹窗结构：头部、正文和底部操作区保持统一留白与分隔线。 */
 .modal-header {
   display: flex;
   align-items: center;
@@ -46,6 +50,7 @@
   color: var(--color-text-primary);
 }
 
+/* 关闭按钮：圆形悬停反馈用于所有业务弹窗。 */
 .modal-close {
   width: 28px;
   height: 28px;

@@ -1,12 +1,11 @@
 /**
-* Landing Page Styles
-* 落地页基础样式框架
-*
-* @description 定义落地页通用布局、section基础样式及动画
-*/
+ * 落地页样式：承载品牌首屏、业务介绍、技术产品、合作伙伴、CTA 和页脚。
+ * 页面依赖大量展示型网格与响应式断点，注释按区块说明布局意图和层级关系。
+ */
 
 /* =====================
    页面容器
+   作为落地页根节点，统一背景和文字基色，内部区块再按品牌展示需要覆盖。
    ===================== */
 .landing-page {
   min-height: 100vh;
@@ -16,6 +15,7 @@
 
 /* =====================
    通用容器
+   控制营销内容最大宽度，桌面端增加左右留白，移动端保持安全边距。
    ===================== */
 .container {
   width: 100%;
@@ -31,7 +31,8 @@
 }
 
 /* =====================
-   通用Section样式
+   通用 Section
+   落地页各展示区复用统一垂直节奏，桌面端放大留白增强展示感。
    ===================== */
 .landing-section {
   padding: var(--spacing-xl) 0;
@@ -43,7 +44,7 @@
   }
 }
 
-/* Section标题 */
+/* Section 标题：所有内容区共用居中标题，桌面端提升字号和底部间距。 */
 .section-title {
   font-size: var(--font-size-xl);
   font-weight: 700;
@@ -59,7 +60,7 @@
   }
 }
 
-/* Section副标题 */
+/* Section 副标题：限制最大宽度，保证长说明文案在大屏上仍保持可读行长。 */
 .section-subtitle {
   font-size: var(--font-size-base);
   color: var(--color-text-secondary);
@@ -75,108 +76,11 @@
   }
 }
 
-/* =====================
-   导航栏
-   ===================== */
-#navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: var(--header-height);
-  background: var(--color-bg-header);
-  box-shadow: var(--shadow-sm);
-  z-index: 1000;
-}
 
-.navbar-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 60px;
-}
-
-.navbar-brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--color-primary);
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.navbar-brand img {
-  height: 32px;
-}
-
-.navbar-nav {
-  display: flex;
-  gap: 24px;
-}
-
-.navbar-nav a {
-  color: inherit;
-  text-decoration: none;
-  transition: var(--transition);
-}
-
-.navbar-nav a:hover {
-  color: var(--color-primary);
-}
-
-.navbar-actions {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-/* 导航栏按钮统一样式 */
-.navbar-actions .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 24px;
-  font-size: var(--font-size-base);
-  font-weight: 500;
-  text-decoration: none;
-  border-radius: var(--border-radius);
-  transition: var(--transition);
-  cursor: pointer;
-  min-width: 80px;
-  height: 40px;
-  box-sizing: border-box;
-}
-
-.navbar-actions .btn-primary {
-  background: var(--color-primary);
-  color: var(--color-text-inverse);
-  border: 1px solid var(--color-primary);
-}
-
-.navbar-actions .btn-primary:hover {
-  background: var(--color-primary-dark);
-  border-color: var(--color-primary-dark);
-}
-
-.navbar-actions .btn-outline {
-  background: transparent;
-  color: var(--color-text-primary);
-  border: 1px solid var(--border-color);
-}
-
-.navbar-actions .btn-outline:hover {
-  background: var(--color-primary-bg);
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-}
-
-.navbar-scrolled {
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.9);
-}
 
 /* =====================
-   按钮样式
+   落地页按钮
+   首页按钮保留独立定义，用于覆盖后台按钮的尺寸和反白描边场景。
    ===================== */
 .btn {
   display: inline-flex;
@@ -224,16 +128,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-bg-dark, #1a1a2e); /* 兜底纯色 */
-  background-image: url("../../images/landing-bg.jpg"); /* 背景图路径 */
-  background-position: center center; /* 居中 */
-  background-size: cover; /* 铺满容器 */
-  background-repeat: no-repeat; /* 不重复 */
+  background-color: var(--color-bg-dark, #1a1a2e);
+  background-image: url("../../images/landing-bg.jpg");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
   padding-top: var(--header-height);
   position: relative;
 }
 
-/* 半透明遮罩，让文字更清晰 */
+/* 首屏遮罩层：位于背景图和文字之间，降低图片亮度以保证标题和按钮可读。 */
 #hero::before {
   content: "";
   position: absolute;
@@ -241,19 +145,19 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4); /* 0.4 是透明度，0-1 可调 */
-  z-index: 0; /* 遮罩在背景图上方，文字下方 */
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 0;
 }
 
+/* 首屏内容层：relative + z-index 让文字和按钮位于遮罩上方。 */
 .hero-container {
-  /* 4. 必须加！让文字在遮罩上方，不被挡住 */
   position: relative;
   z-index: 1;
   text-align: center;
   padding: 120px 0;
 }
 
-/* 标题样式保持不变 */
+/* 首屏主标题：品牌口号在首屏中心呈现，颜色使用深色背景反白文字。 */
 .hero-title {
   font-size: 48px;
   color: var(--color-text-inverse);
@@ -284,6 +188,7 @@
 
 /* =====================
    业务区块
+   使用浅色背景区分内容节奏，创始人区单独使用页面底色形成层次变化。
    ===================== */
 #about,
 #technology,
@@ -292,8 +197,13 @@
   background: var(--color-bg-white);
 }
 
+#founders {
+  background: var(--color-bg);
+}
+
 /* =====================
    统计卡片
+   三列指标展示企业能力数据，移动端降为单列提升可读性。
    ===================== */
 .stats-grid {
   display: grid;
@@ -335,6 +245,7 @@
 
 /* =====================
    技术卡片
+   技术能力区固定三列展示，窄屏改为单列避免图标和文案拥挤。
    ===================== */
 .tech-grid {
   display: grid;
@@ -348,19 +259,7 @@
   }
 }
 
-.tech-card {
-  background: var(--color-bg-white);
-  border-radius: var(--border-radius);
-  padding: 32px;
-  text-align: center;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
-}
 
-.tech-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-4px);
-}
 
 .tech-icon {
   font-size: 48px;
@@ -382,6 +281,7 @@
 
 /* =====================
    产品服务卡片
+   产品服务区与技术区保持一致网格节奏，便于视觉扫描。
    ===================== */
 .products-grid {
   display: grid;
@@ -395,18 +295,14 @@
   }
 }
 
+
+
 .product-card {
-  background: var(--color-bg-white);
-  border-radius: var(--border-radius);
-  padding: 32px;
-  text-align: center;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
+  background: #fff;
 }
 
-.product-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-4px);
+.product-card::before {
+  display: none;
 }
 
 .product-icon {
@@ -429,6 +325,7 @@
 
 /* =====================
    合作伙伴
+   auto-fit 网格让 logo 数量变化时自动补齐行列；图片尺寸用 !important 覆盖外部图片默认宽高。
    ===================== */
 .partners-grid {
   display: grid;
@@ -460,7 +357,8 @@
 }
 
 /* =====================
-   CTA区域
+   CTA 区域
+   使用品牌主色作为转化区底色，按钮提供反白主行动作和描边次行动作。
    ===================== */
 #cta {
   background: var(--color-primary);
@@ -481,6 +379,13 @@
   margin-bottom: 32px;
 }
 
+.cta-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+}
+
 .btn-white {
   background: var(--color-text-inverse);
   color: var(--color-primary);
@@ -492,8 +397,20 @@
   border-color: rgba(255, 255, 255, 0.9);
 }
 
+.btn-outline {
+  background: transparent;
+  color: var(--color-text-inverse);
+  border: 1px solid var(--color-text-inverse);
+}
+
+.btn-outline:hover {
+  background: var(--color-text-inverse);
+  color: var(--color-primary);
+}
+
 /* =====================
    页脚
+   深色背景承接页面收尾，链接和版权文字使用低对比度层级。
    ===================== */
 #footer {
   background: var(--color-bg-sidebar);
@@ -522,15 +439,30 @@
   gap: 12px;
 }
 
+.footer-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
 .footer-logo {
   width: auto;
-  height: 32px;
+  height: 64px;
   object-fit: contain;
+}
+
+.footer-brand-name {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--color-primary);
 }
 
 .footer-brand p {
   color: rgba(255, 255, 255, 0.8);
-  font-size: var(--font-size-sm);
+  font-size: 16px;
+  text-align: center;
 }
 
 .footer-links {
@@ -558,42 +490,11 @@
   font-size: var(--font-size-sm);
 }
 
-/* =====================
-   动画关键帧
-   ===================== */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* =====================
-   动画辅助类
-   ===================== */
-.fade-in {
-  animation: fadeIn 0.6s ease forwards;
-}
-
-.slide-up {
-  animation: slideUp 0.6s ease forwards;
-}
 
 /* =====================
    响应式适配
+   1024px 处理平板两列布局，768px 和 480px 逐步收敛为单列与更小字号。
    ===================== */
 @media (max-width: 1024px) {
   .stats-grid,
@@ -602,15 +503,35 @@
     grid-template-columns: repeat(2, 1fr);
   }
   
+  .founders-grid {
+    grid-template-columns: 1fr;
+  }
+  
   .footer-content {
     grid-template-columns: 1fr;
     text-align: center;
+  }
+  
+  .hero-title {
+    font-size: 40px;
+  }
+  
+  .hero-subtitle {
+    font-size: 18px;
   }
 }
 
 @media (max-width: 768px) {
   .navbar-nav {
     display: none;
+  }
+  
+  .navbar-actions {
+    display: none;
+  }
+  
+  .mobile-menu-btn {
+    display: block;
   }
   
   .stats-grid,
@@ -631,18 +552,115 @@
     font-size: 24px;
   }
   
+  .cta-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .cta-actions .btn {
+    width: 100%;
+  }
+  
   .partners-grid {
     grid-template-columns: repeat(3, 1fr);
   }
   
-.partner-logo img {
-  width: 60px !important;
-  height: 60px !important;
+  .partner-logo img {
+    width: 60px !important;
+    height: 60px !important;
+  }
+  
+  .footer-logo-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .footer-brand-name {
+    font-size: 24px;
+  }
+  
+  .footer-logo {
+    height: 48px;
+  }
 }
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+  
+  .hero-title {
+    font-size: 28px;
+  }
+  
+  .hero-subtitle {
+    font-size: 14px;
+  }
+  
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .hero-actions .btn {
+    width: 100%;
+  }
+  
+  .section-title {
+    font-size: 24px;
+  }
+  
+  .section-subtitle {
+    font-size: 14px;
+  }
+  
+  .stat-number {
+    font-size: 28px;
+  }
+  
+  .partners-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .partner-logo img {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  
+  .cta-title {
+    font-size: 20px;
+  }
+  
+  .cta-subtitle {
+    font-size: 14px;
+  }
+  
+  .footer-brand-name {
+    font-size: 20px;
+  }
+  
+  .footer-logo {
+    height: 40px;
+  }
+  
+  .tech-card,
+  .product-card,
+  .stat-card {
+    padding: 24px;
+  }
+  
+  .founder-card {
+    padding: 24px;
+  }
+  
+  .founder-card h3 {
+    font-size: 20px;
+  }
 }
 
 /* =====================
-   创始人板块及占位符
+   创始人板块与图片占位
+   图片未配置时展示占位符；有 src 时切换为真实图片，防止空图标破坏卡片高度。
    ===================== */
 .image-placeholder {
   background: rgba(0, 0, 0, 0.03);
@@ -673,19 +691,7 @@
   }
 }
 
-.founder-card {
-  background: var(--color-bg-white);
-  border-radius: var(--border-radius-lg);
-  padding: 32px;
-  box-shadow: var(--shadow-md);
-  text-align: center;
-  transition: var(--transition);
-}
 
-.founder-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
 
 .founder-photo {
   width: 100%;

@@ -1,9 +1,11 @@
+/* 浏览器默认样式归一化：为企业管理系统的多页面布局提供一致盒模型和基础排版。 */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+/* 根元素与正文：统一字号基准、移动端文字缩放和页面默认背景。 */
 html {
   font-size: 14px;
   -webkit-text-size-adjust: 100%;
@@ -18,6 +20,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* 基础元素重置：链接、列表、图片、表单和表格移除浏览器差异化默认表现。 */
 a {
   color: var(--color-primary);
   text-decoration: none;

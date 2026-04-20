@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * 采购管理种子数据。
+ * 输入：由普通 script 标签在采购页面加载到全局作用域。
+ * 输出：purchaseSystem.store 在 localStorage 为空时复制供应商、订单和分析记录。
+ *
+ * 原因：项目没有后端接口，种子数据负责保证清空浏览器数据后仍能展示完整业务闭环。
+ */
 const purchaseData = {
   suppliers: [
     { id: 'S001', name: '北京钢铁供应商', contact: '刘总', phone: '13700001001', category: '原材料', rating: 5, status: '合作中' },

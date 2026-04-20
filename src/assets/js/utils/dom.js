@@ -7,17 +7,10 @@
 'use strict';
 
 /**
- * 获取单个DOM元素（类似于jQuery的$函数）
- * 
- * 功能：通过CSS选择器查找页面中的第一个匹配元素
- * 
- * @param {string} selector - CSS选择器字符串，比如 '#id'、'.class'、'div'
- * @param {Element} context - 可选，指定在哪个父元素内查找（默认在整个文档document中查找）
- * @returns {Element|null} 返回找到的第一个DOM元素，如果没找到返回null
- * 
- * 使用示例：
- *   $('#header')           // 查找id为header的元素
- *   $('.btn', container)   // 在container元素内查找class为btn的元素
+ * 查询单个 DOM 元素。
+ * @param {string} selector CSS 选择器。
+ * @param {ParentNode} [context=document] 查询上下文。
+ * @returns {Element|null} 匹配到的第一个元素。
  */
 function $(selector, context) {
   // (context || document) 表示：如果传了context就用context，否则用document
@@ -26,20 +19,10 @@ function $(selector, context) {
 }
 
 /**
- * 获取多个DOM元素
- * 
- * 功能：通过CSS选择器查找页面中所有匹配的元素，返回数组形式
- * 
- * @param {string} selector - CSS选择器字符串
- * @param {Element} context - 可选，指定在哪个父元素内查找
- * @returns {Array} 返回包含所有匹配元素的数组（空数组表示没找到）
- * 
- * 使用示例：
- *   $$('.item')           // 查找所有class为item的元素
- *   $$('li', navList)     // 在navList内查找所有li元素
- * 
- * 注意：Array.from()将NodeList（节点列表）转换为真正的数组，
- *      这样就可以使用数组的方法如forEach、map等
+ * 查询多个 DOM 元素并转为数组。
+ * @param {string} selector CSS 选择器。
+ * @param {ParentNode} [context=document] 查询上下文。
+ * @returns {Element[]} 匹配元素数组。
  */
 function $$(selector, context) {
   // querySelectorAll返回NodeList（类似数组但不是真正的数组）
@@ -48,18 +31,13 @@ function $$(selector, context) {
 }
 
 /**
- * 创建DOM元素
- * 
- * 功能：快速创建一个新的HTML元素，并可同时设置class和内部内容
- * 
- * @param {string} tag - HTML标签名，比如 'div'、'span'、'button'
- * @param {string} className - 可选，要添加到元素上的CSS类名
- * @param {string} innerHTML - 可选，元素的内部HTML内容
- * @returns {Element} 返回创建好的新元素
- * 
- * 使用示例：
- *   createElement('div', 'card', '<p>内容</p>')  // 创建一个带card类的div
- *   createElement('button', 'btn-primary')       // 创建一个按钮，无内容
+ * 创建运行时需要的 DOM 节点。
+ * @param {string} tag 标签名。
+ * @param {string} [className] 初始类名。
+ * @param {string} [innerHTML] 初始 HTML 内容。
+ * @returns {HTMLElement} 新建元素。
+ *
+ * 原因：公共组件和业务弹窗会在运行时创建节点，统一入口便于后续替换为安全渲染策略。
  */
 function createElement(tag, className, innerHTML) {
   // 第一步：使用document.createElement创建指定类型的元素
@@ -78,20 +56,13 @@ function createElement(tag, className, innerHTML) {
 }
 
 /**
- * 绑定事件监听器
- * 
- * 功能：给指定元素添加事件监听（如点击、鼠标移动等）
- * 
- * @param {Element} element - 要绑定事件的DOM元素
- * @param {string} event - 事件类型，比如 'click'、'mouseover'、'input'
- * @param {Function} handler - 事件触发时要执行的函数（回调函数）
- * 
- * 使用示例：
- *   on(button, 'click', function() { alert('被点击了'); })
- * 
- * 边界情况处理：
- *   - 如果element为null或undefined，不会报错，直接返回
- *   - 这样防止因为元素不存在导致程序崩溃
+ * 为存在的元素绑定事件。
+ * @param {Element|null} element 目标元素。
+ * @param {string} event 事件名。
+ * @param {EventListener} handler 事件处理函数。
+ * @returns {void}
+ *
+ * 原因：不同业务子页面 DOM 不完全一致，缺失按钮不应导致初始化报错。
  */
 function on(element, event, handler) {
   // 先检查element是否存在，避免对null调用方法导致错误
@@ -100,34 +71,17 @@ function on(element, event, handler) {
 }
 
 /**
- * 事件委托（Event Delegation）
- * 
- * 功能：将子元素的事件处理委托给父元素，提高性能，特别适合动态添加的元素
- * 
- * 原理说明：
- *   想象一个班级，老师（父元素）代替学生（子元素）接收消息。
- *   当有新生（动态添加的元素）加入时，不需要单独通知他们规则，
- *   因为老师统一处理。
- * 
- * @param {Element} parent - 父元素，负责监听事件
- * @param {string} selector - 子元素的选择器（指定哪些子元素触发）
- * @param {string} event - 事件类型
- * @param {Function} handler - 事件处理函数
- * 
- * 使用示例：
- *   delegate(list, 'li', 'click', function(e) {
- *     console.log('点击了列表项：', this.textContent);
- *   });
- * 
- * 优点：
- *   1. 减少事件监听器的数量，提高性能
- *   2. 对动态添加的元素也有效（不需要重新绑定）
+ * 在父元素上委托处理后代元素事件。
+ * @param {Element|null} parent 事件委托父节点。
+ * @param {string} selector 需要匹配的子元素选择器。
+ * @param {string} event 事件名。
+ * @param {Function} handler 处理函数，this 指向匹配到的子元素。
+ * @returns {void}
+ *
+ * 原因：业务表格会整表重渲染，委托能让新增行和刷新后的按钮继续响应。
  */
 function delegate(parent, selector, event, handler) {
-  // 在父元素上绑定事件
-  on(parent, event, function (e) {
-    // e.target是实际被点击的元素
-    // closest(selector)从被点击的元素向上查找，找到最近的匹配selector的祖先元素
+  on(parent, event, (e) => {
     const target = e.target.closest(selector);
 
     // 检查：1. 找到了目标元素  2. 目标元素确实在父元素内
@@ -140,15 +94,10 @@ function delegate(parent, selector, event, handler) {
 }
 
 /**
- * 添加CSS类名
- * 
- * @param {Element} element - 目标元素
- * @param {string} className - 要添加的类名
- * 
- * 使用示例：
- *   addClass(box, 'active')  // 给box元素添加active类
- * 
- * 边界情况：如果element为null，不执行任何操作
+ * 添加 UI 状态类。
+ * @param {Element|null} element 目标元素。
+ * @param {string} className 状态类名。
+ * @returns {void}
  */
 function addClass(element, className) {
   // classList是元素的类名集合，add方法添加新类名
@@ -157,31 +106,20 @@ function addClass(element, className) {
 }
 
 /**
- * 移除CSS类名
- * 
- * @param {Element} element - 目标元素
- * @param {string} className - 要移除的类名
- * 
- * 使用示例：
- *   removeClass(box, 'active')  // 从box元素移除active类
- * 
- * 边界情况：如果类名不存在，不会报错
+ * 移除 UI 状态类。
+ * @param {Element|null} element 目标元素。
+ * @param {string} className 状态类名。
+ * @returns {void}
  */
 function removeClass(element, className) {
   if (element) element.classList.remove(className);
 }
 
 /**
- * 检查元素是否包含某个CSS类名
- * 
- * @param {Element} element - 目标元素
- * @param {string} className - 要检查的类名
- * @returns {boolean} 如果元素包含该类名返回true，否则返回false
- * 
- * 使用示例：
- *   if (hasClass(box, 'active')) { ... }
- * 
- * 边界情况：如果element为null，返回false（安全处理）
+ * 判断元素是否拥有指定状态类。
+ * @param {Element|null} element 目标元素。
+ * @param {string} className 状态类名。
+ * @returns {boolean} 存在元素且拥有类名时返回 true。
  */
 function hasClass(element, className) {
   // 使用三元运算符简化返回逻辑

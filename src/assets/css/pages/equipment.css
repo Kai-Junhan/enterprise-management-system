@@ -1,10 +1,11 @@
-/* 主布局 */
+/* 业务页框架：设备管理页面复用后台头部和侧边栏，主体区域通过变量避让固定导航。 */
 .layout {
   display: flex;
   min-height: 100vh;
   padding-top: var(--header-height);
 }
 
+/* 内容区：桌面端为侧边栏预留左边距，最小高度覆盖头部以下的完整视口。 */
 .main-content {
   margin-left: var(--sidebar-width);
   flex: 1;
@@ -12,7 +13,7 @@
   min-height: calc(100vh - var(--header-height));
 }
 
-/* 页面头部 */
+/* 页面头部：标题说明和右侧操作入口保持横向分布。 */
 .page-header {
   display: flex;
   align-items: center;
@@ -32,7 +33,7 @@
   margin-top: 2px;
 }
 
-/* 统计卡片网格 */
+/* 统计区：自适应网格承载设备状态、维护、故障和档案指标。 */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -40,7 +41,7 @@
   margin-bottom: var(--spacing-lg);
 }
 
-/* 工具栏 */
+/* 工具栏：筛选、搜索和新增动作左右分组，空间不足时自动换行。 */
 .toolbar {
   display: flex;
   align-items: center;
@@ -62,7 +63,7 @@
   gap: var(--spacing-sm);
 }
 
-/* 搜索框 */
+/* 搜索框：focus-within 让输入框聚焦时高亮整个搜索容器。 */
 .search-box {
   display: flex;
   align-items: center;
@@ -92,7 +93,7 @@
   color: var(--color-text-disabled);
 }
 
-/* ========== 移动端响应式样式 ========== */
+/* 移动端业务页：侧边栏变为抽屉后主体取消左边距，工具栏和统计卡片纵向堆叠。 */
 @media (max-width: 768px) {
   .layout {
     padding-top: var(--header-height);

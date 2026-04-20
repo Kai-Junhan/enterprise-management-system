@@ -1,3 +1,4 @@
+/* 基础卡片：承载业务表格外壳、概览区域和内容面板的统一容器。 */
 .card {
   background: var(--color-bg-white);
   border-radius: var(--border-radius);
@@ -10,6 +11,7 @@
   box-shadow: var(--shadow-md);
 }
 
+/* 卡片头部：标题与操作入口左右分布，底部分隔线保持面板层次。 */
 .card-header {
   display: flex;
   align-items: center;
@@ -29,7 +31,7 @@
   color: var(--color-text-secondary);
 }
 
-/* 统计卡片 */
+/* 统计卡片：业务首页和仪表盘用图标、数值、标签组成快速入口或指标卡。 */
 .stat-card {
   background: var(--color-bg-white);
   border-radius: var(--border-radius);
@@ -70,4 +72,185 @@
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   margin-top: 2px;
+}
+
+/* 技术卡片：落地页技术能力区使用相对定位，伪元素光扫层放在内容下方。 */
+.tech-card {
+  background: var(--color-bg-white);
+  border-radius: var(--border-radius-lg);
+  padding: 32px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tech-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 107, 0, 0),
+    rgba(255, 107, 0, 0.05),
+    rgba(255, 107, 0, 0)
+  );
+  transition: all 0.5s ease;
+  z-index: 0;
+}
+
+.tech-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-8px) scale(1.02);
+}
+
+.tech-card:hover::before {
+  left: 100%;
+}
+
+/* 技术卡片内容层：所有直接子元素抬到 z-index 1，避免被光扫伪元素覆盖。 */
+.tech-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.tech-card img {
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 24px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 产品卡片：落地页产品服务区使用大面积渐变伪元素制造悬停动势。 */
+.product-card {
+  background: white;
+  border-radius: var(--border-radius-lg);
+  padding: 32px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 107, 0, 0.05),
+    rgba(255, 107, 0, 0)
+  );
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+  z-index: 0;
+}
+
+.product-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-8px) scale(1.02);
+}
+
+.product-card:hover::before {
+  top: -30%;
+  left: -30%;
+}
+
+/* 产品卡片内容层：内容固定在渐变装饰层之上，保持文字和图片可读。 */
+.product-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.product-card img {
+  height: 180px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+/* 创始人卡片：创始人板块使用底部进度线式 hover，突出人物卡片可交互感。 */
+.founder-card {
+  background: var(--color-bg-white);
+  border-radius: var(--border-radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.founder-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 4px;
+  background: var(--color-primary);
+  transition: all 0.3s ease;
+}
+
+.founder-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-lg);
+}
+
+.founder-card:hover::after {
+  width: 100%;
+}
+
+.founder-card h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--color-text-primary);
+  transition: var(--transition);
+}
+
+.founder-card:hover h3 {
+  color: var(--color-primary);
+}
+
+.founder-photo {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  margin-bottom: 24px;
+  display: none;
+}
+
+/* 创始人图片兜底：有真实 src 时显示图片并隐藏占位符，避免空图标破坏卡片布局。 */
+.founder-photo[src]:not([src=""]) {
+  display: block;
+}
+.founder-card .image-placeholder {
+  display: flex;
+}
+.founder-photo[src]:not([src=""]) + .image-placeholder {
+  display: none;
+}
+
+.founder-title {
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.founder-bio {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
 }

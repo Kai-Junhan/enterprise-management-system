@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * 销售管理种子数据。
+ * 输入：由普通 script 标签在销售页面加载到全局作用域。
+ * 输出：salesSystem.store 在 localStorage 为空时复制客户、订单、报表、定价和团队记录。
+ *
+ * 原因：项目没有后端接口，种子数据负责保证清空浏览器数据后仍能展示完整业务闭环。
+ */
 const salesData = {
   customers: [
     { id: 'C001', name: '北京科技有限公司', contact: '张总', phone: '13900001001', email: 'zhang@bjtech.com', city: '北京', level: 'VIP', totalAmount: 580000 },
