@@ -87,15 +87,36 @@ warehouseSystem.pages = (function(store, renderers, view) {
   }
 
   /**
+   * 格式化运输跟踪状态文案。
+   * @param {Date} today 当前日期。
+   * @param {string} outDateText 出库日期文本。
+   * @returns {string} 运输跟踪状态文案。
+   *
+   * 原因：计划中、今日和已出库天数的判断属于日期展示规则，拆出后行渲染器只负责表格结构。
+   */
+  function formatTransportStatusText(today, outDateText) {
+    const outDate = new Date(outDateText);
+    const daysSince = Math.ceil((today - outDate) / (1000 * 60 * 60 * 24));
+
+    if (daysSince < 0) {
+      return `计划中 (${Math.abs(daysSince)}天后)`;
+    }
+
+    if (daysSince === 0) {
+      return '今日';
+    }
+
+    return `${daysSince} 天前`;
+  }
+
+  /**
    * 创建运输跟踪行渲染器。
    * @param {Date} today 当前日期。
    * @returns {Function} 接收出库记录并返回运输跟踪表格行 HTML 的渲染函数。
    */
   function renderTransportRow(today) {
     return (item) => {
-      const outDate = new Date(item.date);
-      const daysSince = Math.ceil((today - outDate) / (1000 * 60 * 60 * 24));
-      const statusText = daysSince < 0 ? `计划中 (${Math.abs(daysSince)}天后)` : daysSince === 0 ? '今日' : `${daysSince} 天前`;
+      const statusText = formatTransportStatusText(today, item.date);
 
       return `
         <tr>

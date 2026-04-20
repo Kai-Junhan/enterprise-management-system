@@ -7,7 +7,15 @@
  *
  * 原因：项目没有构建工具，每个 HTML 只负责引入基础脚本，剩余运行时能力由 main.js 按页面动态装配。
  */
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', bootstrapApp);
+
+/**
+ * 编排企业管理系统启动流程。
+ * @returns {Promise<void>} 启动流程完成后 resolve，失败时记录错误。
+ *
+ * 原因：DOMContentLoaded 入口只负责触发启动，具体步骤拆开后便于确认依赖顺序没有被误改。
+ */
+async function bootstrapApp() {
   const initialMeta = getInitialPageMeta();
 
   try {
@@ -15,26 +23,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadCoreRuntime(initialMeta.rootPath);
 
     const pageMeta = appRouter.getPageMeta();
-    if (!appRouter.isPublicPage(pageMeta) && typeof auth !== 'undefined' && !auth.isLoggedIn()) {
-      auth.guard();
+    if (guardPrivatePage(pageMeta)) {
       return;
     }
 
     const pageController = getPageController(pageMeta);
     await loadPageDependencies(pageMeta, pageController);
-
-    appCursor.init();
-    appRouter.initPathObserver();
-
-    await appShell.loadPageShell(pageMeta);
-    await appShell.ensureMobileNav(pageMeta);
-    appShell.initSharedNavigation();
-    await appScriptLoader.initBusinessSystem(pageMeta);
-    initPageController(pageController);
+    await initSharedRuntime(pageMeta);
+    await initBusinessRuntime(pageMeta, pageController);
   } catch (error) {
     console.error('App bootstrap failed:', error);
   }
-});
+}
 
 const PAGE_CONTROLLERS = {
   'dashboard.html': 'dashboard',
@@ -48,6 +48,51 @@ const PAGE_EXTRA_UTILS = {
 };
 
 const SCRIPT_READY_TIMEOUT = 15000;
+
+/**
+ * 对后台页面执行登录守卫。
+ * @param {{pageName: string}} pageMeta 当前页面元信息。
+ * @returns {boolean} 已触发跳转守卫时返回 true，否则返回 false。
+ *
+ * 原因：启动链路需要在加载页面脚本前阻止未登录访问，拆出后主流程只保留阶段顺序。
+ */
+function guardPrivatePage(pageMeta) {
+  if (!appRouter.isPublicPage(pageMeta) && typeof auth !== 'undefined' && !auth.isLoggedIn()) {
+    auth.guard();
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * 初始化公共 UI 运行时。
+ * @param {{rootPath: string}} pageMeta 当前页面元信息。
+ * @returns {Promise<void>} 公共组件和导航初始化完成后 resolve。
+ *
+ * 原因：光标、路径观察、外壳片段和移动导航都属于共享 UI 阶段，集中后可避免和业务初始化混在一起。
+ */
+async function initSharedRuntime(pageMeta) {
+  appCursor.init();
+  appRouter.initPathObserver();
+
+  await appShell.loadPageShell(pageMeta);
+  await appShell.ensureMobileNav(pageMeta);
+  appShell.initSharedNavigation();
+}
+
+/**
+ * 初始化当前业务域和页面控制器。
+ * @param {{section: string, rootPath: string}} pageMeta 当前页面元信息。
+ * @param {string|undefined} pageController 页面控制器名称。
+ * @returns {Promise<void>} 业务域和页面控制器初始化完成后 resolve。
+ *
+ * 原因：业务系统初始化和独立页面控制器是启动链路最后阶段，保持顺序可避免 DOM 与数据依赖提前执行。
+ */
+async function initBusinessRuntime(pageMeta, pageController) {
+  await appScriptLoader.initBusinessSystem(pageMeta);
+  initPageController(pageController);
+}
 
 /**
  * 根据脚本标识返回运行时就绪探测函数。
