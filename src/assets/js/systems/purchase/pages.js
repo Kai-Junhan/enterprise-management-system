@@ -57,18 +57,37 @@ purchaseSystem.pages = (function(store, actions, renderers, view) {
     `;
   }
 
+  /**
+   * 格式化采购到货剩余天数展示。
+   * @param {string} status 采购订单状态。
+   * @param {string} deliveryDateText 预计到货日期文本。
+   * @returns {string} 可直接放入表格单元格的到货天数 HTML 或文本。
+   *
+   * 原因：逾期、临近到货和已到货的展示规则嵌套较深，拆出后订单行渲染只负责表格结构。
+   */
+  function formatDeliveryDaysDisplay(status, deliveryDateText) {
+    const today = new Date();
+    const deliveryDate = new Date(deliveryDateText);
+    const daysLeft = Math.ceil((deliveryDate - today) / (1000 * 60 * 60 * 24));
+
+    if (status === '已到货') {
+      return '—';
+    }
+
+    if (daysLeft < 0) {
+      return `<span style="color:var(--color-danger);font-weight:600">已逾期 ${Math.abs(daysLeft)} 天</span>`;
+    }
+
+    if (daysLeft <= 3) {
+      return `<span style="color:var(--color-warning);font-weight:600">${daysLeft} 天</span>`;
+    }
+
+    return `${daysLeft} 天`;
+  }
+
   // 渲染到货跟踪页的采购订单行。
   function renderTrackingRow(item) {
-    const today = new Date();
-    const deliveryDate = new Date(item.deliveryDate);
-    const daysLeft = Math.ceil((deliveryDate - today) / (1000 * 60 * 60 * 24));
-    const daysDisplay = item.status === '已到货'
-      ? '—'
-      : daysLeft < 0
-        ? `<span style="color:var(--color-danger);font-weight:600">已逾期 ${Math.abs(daysLeft)} 天</span>`
-        : daysLeft <= 3
-          ? `<span style="color:var(--color-warning);font-weight:600">${daysLeft} 天</span>`
-          : `${daysLeft} 天`;
+    const daysDisplay = formatDeliveryDaysDisplay(item.status, item.deliveryDate);
 
     return `
       <tr>

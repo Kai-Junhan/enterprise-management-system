@@ -64,40 +64,63 @@ const appRouter = (function() {
   }
 
   /**
+   * 修正公共组件里的静态资源和业务页链接。
+   * @returns {void}
+   *
+   * 原因：MutationObserver 会在 header/sidebar 注入后触发，dataset.fixed 防止同一链接被重复改写。
+   */
+  function fixComponentPaths() {
+    const pageMeta = getPageMeta();
+    if (!pageMeta.rootPath && !pageMeta.pagesPath) return;
+
+    fixHeaderLogoPath(pageMeta);
+    fixSidebarItemPaths(pageMeta);
+  }
+
+  /**
+   * 修正公共 header 中的品牌图片路径。
+   * @param {{rootPath: string}} pageMeta 当前页面元信息。
+   * @returns {void}
+   *
+   * 原因：header 片段被不同层级页面复用，图片路径必须按当前页面重新计算。
+   */
+  function fixHeaderLogoPath(pageMeta) {
+    const logoImg = document.getElementById('header-logo-img');
+    if (!logoImg || logoImg.dataset.fixed) {
+      return;
+    }
+
+    logoImg.style.display = '';
+    logoImg.dataset.fixed = '1';
+    setTimeout(() => {
+      logoImg.src = pageMeta.rootPath + 'assets/images/logo.png';
+    }, 0);
+  }
+
+  /**
+   * 修正公共 sidebar 中的业务页面链接。
+   * @param {{pagesPath: string}} pageMeta 当前页面元信息。
+   * @returns {void}
+   *
+   * 原因：侧边栏 HTML 片段不知道调用页面层级，注入后需要统一补齐可访问链接。
+   */
+  function fixSidebarItemPaths(pageMeta) {
+    const sidebarItems = document.querySelectorAll('.sidebar-item[data-page]:not([data-fixed])');
+    sidebarItems.forEach((item) => {
+      const targetPage = item.getAttribute('data-page');
+      const fixedHref = pageMeta.pagesPath + targetPage;
+      item.setAttribute('href', fixedHref);
+      item.dataset.fixed = '1';
+    });
+  }
+
+  /**
    * 监听公共组件注入，并修正组件内部的图片和侧边栏链接路径。
    * @returns {void}
    *
    * 原因：header/sidebar 是从 src/components 注入的静态片段，片段内路径无法提前知道调用页面层级。
    */
   function initPathObserver() {
-    /**
-     * 修正公共组件里的静态资源和业务页链接。
-     * @returns {void}
-     *
-     * 原因：MutationObserver 会在 header/sidebar 注入后触发，dataset.fixed 防止同一链接被重复改写。
-     */
-    function fixComponentPaths() {
-      const pageMeta = getPageMeta();
-      if (!pageMeta.rootPath && !pageMeta.pagesPath) return;
-
-      const logoImg = document.getElementById('header-logo-img');
-      if (logoImg && !logoImg.dataset.fixed) {
-        logoImg.style.display = '';
-        logoImg.dataset.fixed = '1';
-        setTimeout(() => {
-          logoImg.src = pageMeta.rootPath + 'assets/images/logo.png';
-        }, 0);
-      }
-
-      const sidebarItems = document.querySelectorAll('.sidebar-item[data-page]:not([data-fixed])');
-      sidebarItems.forEach((item) => {
-        const targetPage = item.getAttribute('data-page');
-        const fixedHref = pageMeta.pagesPath + targetPage;
-        item.setAttribute('href', fixedHref);
-        item.dataset.fixed = '1';
-      });
-    }
-
     const observer = new MutationObserver(fixComponentPaths);
     observer.observe(document.body, { childList: true, subtree: true });
     fixComponentPaths();

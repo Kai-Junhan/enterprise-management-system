@@ -130,75 +130,128 @@ equipmentSystem.pages = (function(store, actions, renderers, view) {
     tbody.dataset.bound = '1';
   }
 
-  // 初始化设备档案页。
-  function initInfoPage() {
-    const tbody = document.getElementById('info-tbody');
-    if (!tbody || tbody.dataset.bound === '1') return;
+  /**
+   * 关闭设备档案详情弹窗。
+   * @returns {void}
+   *
+   * 原因：详情弹窗只负责展示设备信息，关闭时统一移除遮罩激活类即可。
+   */
+  function closeInfoModal() {
+    removeClass(document.getElementById('modal-overlay'), 'active');
+  }
 
-    // 关闭设备档案详情弹窗。
-    function closeModal() {
-      removeClass(document.getElementById('modal-overlay'), 'active');
-    }
+  /**
+   * 渲染设备档案详情 HTML。
+   * @param {Object} item 设备档案数据。
+   * @returns {string} 设备档案详情 HTML。
+   *
+   * 原因：详情字段较多，拆出模板后打开弹窗流程只处理 DOM 状态。
+   */
+  function renderEquipmentDetail(item) {
+    return `
+      <div class="form-row">
+        <div class="form-group"><div class="form-label">设备编号</div><div>${item.id}</div></div>
+        <div class="form-group"><div class="form-label">设备名称</div><div>${item.name}</div></div>
+        <div class="form-group"><div class="form-label">型号</div><div>${item.model}</div></div>
+        <div class="form-group"><div class="form-label">位置</div><div>${item.location}</div></div>
+        <div class="form-group"><div class="form-label">购入日期</div><div>${item.purchaseDate}</div></div>
+        <div class="form-group"><div class="form-label">上次维护</div><div>${item.lastMaintain}</div></div>
+        <div class="form-group"><div class="form-label">下次维护</div><div>${item.nextMaintain}</div></div>
+        <div class="form-group"><div class="form-label">状态</div><div><span class="badge ${renderers.equipmentStatusMap[item.status] || 'badge-default'}">${item.status}</span></div></div>
+      </div>
+    `;
+  }
 
-    // 打开设备档案详情弹窗。
-    function showDetail(id) {
-      const item = store.sync().equipment.find((equipment) => equipment.id === id);
-      const title = document.getElementById('modal-title');
-      const body = document.getElementById('modal-body');
-      if (!item || !title || !body) return;
+  /**
+   * 打开设备档案详情弹窗。
+   * @param {string} id 设备编号。
+   * @returns {void}
+   *
+   * 原因：详情弹窗依赖当前设备数据和 modal DOM，集中处理空数据兜底。
+   */
+  function showInfoDetail(id) {
+    const item = store.sync().equipment.find((equipment) => equipment.id === id);
+    const title = document.getElementById('modal-title');
+    const body = document.getElementById('modal-body');
+    if (!item || !title || !body) return;
 
-      title.textContent = item.name + ' 设备档案';
-      body.innerHTML = `
-        <div class="form-row">
-          <div class="form-group"><div class="form-label">设备编号</div><div>${item.id}</div></div>
-          <div class="form-group"><div class="form-label">设备名称</div><div>${item.name}</div></div>
-          <div class="form-group"><div class="form-label">型号</div><div>${item.model}</div></div>
-          <div class="form-group"><div class="form-label">位置</div><div>${item.location}</div></div>
-          <div class="form-group"><div class="form-label">购入日期</div><div>${item.purchaseDate}</div></div>
-          <div class="form-group"><div class="form-label">上次维护</div><div>${item.lastMaintain}</div></div>
-          <div class="form-group"><div class="form-label">下次维护</div><div>${item.nextMaintain}</div></div>
-          <div class="form-group"><div class="form-label">状态</div><div><span class="badge ${renderers.equipmentStatusMap[item.status] || 'badge-default'}">${item.status}</span></div></div>
-        </div>
-      `;
-      addClass(document.getElementById('modal-overlay'), 'active');
-    }
+    title.textContent = item.name + ' 设备档案';
+    body.innerHTML = renderEquipmentDetail(item);
+    addClass(document.getElementById('modal-overlay'), 'active');
+  }
 
-    // 刷新设备档案页列表。
-    function refresh() {
-      const keyword = view.getTrimmedValue('search-input');
-      const list = view.filterByKeyword(store.sync().equipment, keyword, ['name', 'model']);
-      view.renderRows(tbody, list, renderEquipmentInfoRow, { colspan: 9, text: '暂无设备档案' });
-    }
+  /**
+   * 刷新设备档案页列表。
+   * @param {HTMLElement} tbody 设备档案表格 body。
+   * @returns {void}
+   *
+   * 原因：搜索、新增和删除后都需要按同一规则重新渲染设备档案列表。
+   */
+  function refreshInfoPage(tbody) {
+    const keyword = view.getTrimmedValue('search-input');
+    const list = view.filterByKeyword(store.sync().equipment, keyword, ['name', 'model']);
+    view.renderRows(tbody, list, renderEquipmentInfoRow, { colspan: 9, text: '暂无设备档案' });
+  }
+
+  /**
+   * 新增设备档案并刷新列表。
+   * @param {HTMLElement} tbody 设备档案表格 body。
+   * @returns {void}
+   *
+   * 原因：新增 prompt 字段和刷新动作属于同一用户操作，拆出后事件绑定更清晰。
+   */
+  function addInfoEquipment(tbody) {
+    const payload = view.promptFields([
+      { name: 'name', label: '设备名称', required: true },
+      { name: 'model', label: '设备型号', defaultValue: 'NEW-100' },
+      { name: 'location', label: '设备位置', defaultValue: '新车间' },
+      { name: 'status', label: '设备状态（运行中/维修中/停机）', defaultValue: '运行中' }
+    ]);
+    if (!payload) return;
+
+    actions.createEquipment(payload);
+    refreshInfoPage(tbody);
+  }
+
+  /**
+   * 绑定设备档案页搜索、新增、详情和删除事件。
+   * @param {HTMLElement} tbody 设备档案表格 body。
+   * @returns {void}
+   *
+   * 原因：事件绑定集中后，initInfoPage 只负责页面进入条件和首次刷新。
+   */
+  function bindInfoEvents(tbody) {
+    view.bindModalClose(closeInfoModal);
+    on(document.getElementById('search-input'), 'input', () => refreshInfoPage(tbody));
+    on(document.getElementById('add-btn'), 'click', () => addInfoEquipment(tbody));
 
     // 打开当前行的设备档案详情。
     function handleDetailClick() {
-      showDetail(this.dataset.id);
+      showInfoDetail(this.dataset.id);
     }
 
     // 删除当前行的设备档案。
     function handleEquipmentDelete() {
-      view.confirmDelete('确认删除该设备？', () => actions.deleteEquipment(this.dataset.id), refresh);
+      view.confirmDelete('确认删除该设备？', () => actions.deleteEquipment(this.dataset.id), () => refreshInfoPage(tbody));
     }
 
-    view.bindModalClose(closeModal);
-    on(document.getElementById('search-input'), 'input', refresh);
-    on(document.getElementById('add-btn'), 'click', () => {
-      const payload = view.promptFields([
-        { name: 'name', label: '设备名称', required: true },
-        { name: 'model', label: '设备型号', defaultValue: 'NEW-100' },
-        { name: 'location', label: '设备位置', defaultValue: '新车间' },
-        { name: 'status', label: '设备状态（运行中/维修中/停机）', defaultValue: '运行中' }
-      ]);
-      if (!payload) return;
-
-      actions.createEquipment(payload);
-      refresh();
-    });
     delegate(tbody, '[data-action="detail"]', 'click', handleDetailClick);
     delegate(tbody, '[data-action="delete"]', 'click', handleEquipmentDelete);
+  }
 
+  /**
+   * 初始化设备档案页。
+   * @returns {void}
+   *
+   * 原因：设备档案页存在弹窗、搜索和表格委托事件，入口只保留防重复绑定和初始化编排。
+   */
+  function initInfoPage() {
+    const tbody = document.getElementById('info-tbody');
+    if (!tbody || tbody.dataset.bound === '1') return;
+
+    bindInfoEvents(tbody);
     tbody.dataset.bound = '1';
-    refresh();
+    refreshInfoPage(tbody);
   }
 
   // 初始化设备维护计划页。
