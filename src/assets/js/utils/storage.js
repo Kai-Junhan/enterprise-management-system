@@ -1,11 +1,7 @@
 /**
  * 本地存储工具库
- * 这个文件提供了对浏览器本地存储（localStorage和sessionStorage）的封装
- * 类比：就像浏览器的"记事本"，可以保存数据在页面关闭后依然存在
- * 
- * 两种存储方式的区别：
- * - localStorage：永久存储，关闭浏览器后数据还在，直到手动删除
- * - sessionStorage：临时存储，关闭标签页后数据就消失
+ * 封装浏览器 localStorage 和 sessionStorage，提供统一的读写 API
+ * 支持降级到 Cookie 存储（当 Storage 不可用时）
  */
 
 'use strict';
@@ -15,10 +11,20 @@ const storageMemory = {
   session: {}
 };
 
+/**
+ * 序列化数据为 JSON 字符串
+ * @param {*} value - 要序列化的值
+ * @returns {string} - JSON 字符串
+ */
 function serialize(value) {
   return JSON.stringify(value);
 }
 
+/**
+ * 解析 JSON 字符串
+ * @param {string} value - JSON 字符串
+ * @returns {*|null} - 解析后的值，失败返回 null
+ */
 function parse(value) {
   if (!value) return null;
   try {
@@ -28,6 +34,11 @@ function parse(value) {
   }
 }
 
+/**
+ * 获取存储区域对象
+ * @param {string} name - 存储类型名称 ('localStorage' | 'sessionStorage')
+ * @returns {Storage|null} - 存储对象或 null
+ */
 function getStorageArea(name) {
   try {
     return window[name];
@@ -36,6 +47,11 @@ function getStorageArea(name) {
   }
 }
 
+/**
+ * 检测存储是否可用
+ * @param {Storage} area - 存储对象
+ * @returns {boolean} - 可用返回 true
+ */
 function canUseStorage(area) {
   try {
     if (!area) return false;
@@ -48,6 +64,11 @@ function canUseStorage(area) {
   }
 }
 
+/**
+ * 获取 Cookie 值
+ * @param {string} key - Cookie 名称
+ * @returns {string|null} - Cookie 值或 null
+ */
 function getCookie(key) {
   const encodedKey = encodeURIComponent(key) + '=';
   const item = document.cookie
@@ -57,23 +78,36 @@ function getCookie(key) {
   return item ? decodeURIComponent(item.slice(encodedKey.length)) : null;
 }
 
+/**
+ * 设置 Cookie
+ * @param {string} key - Cookie 名称
+ * @param {string} value - Cookie 值
+ * @returns {void}
+ */
 function setCookie(key, value) {
   document.cookie = encodeURIComponent(key) + '=' + encodeURIComponent(value) + '; path=/; SameSite=Lax';
 }
 
+/**
+ * 删除 Cookie
+ * @param {string} key - Cookie 名称
+ * @returns {void}
+ */
 function removeCookie(key) {
   document.cookie = encodeURIComponent(key) + '=; path=/; max-age=0; SameSite=Lax';
 }
 
 /**
- * 浏览器存储封装。
- * 输入：业务 key 和可 JSON 序列化的值。
- * 输出：localStorage 持久数据和 sessionStorage 会话数据的统一读写 API。
- *
- * 原因：项目没有后端，业务演示数据必须在刷新后保留；登录态只保留在当前浏览器会话中。
+ * 浏览器存储封装
+ * 提供 localStorage 持久存储和 sessionStorage 会话存储的统一 API
  */
 const storage = {
-  /** @param {string} key 存储 key。@param {*} value 需要持久保存的业务数据。@returns {void} */
+  /**
+   * 设置持久存储数据
+   * @param {string} key - 存储键名
+   * @param {*} value - 存储值（可 JSON 序列化）
+   * @returns {void}
+   */
   set(key, value) {
     const serialized = serialize(value);
     storageMemory.local[key] = serialized;
@@ -84,7 +118,12 @@ const storage = {
     }
     setCookie('local_' + key, serialized);
   },
-  /** @param {string} key 存储 key。@returns {*|null} 解析后的业务数据；解析失败返回 null。 */
+
+  /**
+   * 获取持久存储数据
+   * @param {string} key - 存储键名
+   * @returns {*|null} - 解析后的数据，失败返回 null
+   */
   get(key) {
     const area = getStorageArea('localStorage');
     if (canUseStorage(area)) {
@@ -92,7 +131,12 @@ const storage = {
     }
     return parse(storageMemory.local[key]) || parse(getCookie('local_' + key));
   },
-  /** @param {string} key 存储 key。@returns {void} */
+
+  /**
+   * 删除持久存储数据
+   * @param {string} key - 存储键名
+   * @returns {void}
+   */
   remove(key) {
     delete storageMemory.local[key];
     const area = getStorageArea('localStorage');
@@ -101,7 +145,11 @@ const storage = {
     }
     removeCookie('local_' + key);
   },
-  /** @returns {void} 清空全部持久业务数据。 */
+
+  /**
+   * 清空所有持久存储数据
+   * @returns {void}
+   */
   clear() {
     document.cookie.split(';').forEach((part) => {
       const key = decodeURIComponent(part.split('=')[0].trim());
@@ -117,18 +165,16 @@ const storage = {
   },
 
   /**
-   * sessionStorage子对象 - 临时存储
-   * 
-   * 功能与localStorage完全相同，但数据只在当前会话（标签页）有效
-   * 关闭标签页后数据自动清除
-   * 
-   * 适用场景：
-   *   - 临时表单数据
-   *   - 页面间的临时传递数据
-   *   - 不需要长期保存的信息
+   * 会话存储（sessionStorage）
+   * 数据仅在当前会话有效，关闭标签页后自动清除
    */
   session: {
-    /** @param {string} key 会话 key。@param {*} value 当前登录用户会话数据。@returns {void} */
+    /**
+     * 设置会话存储数据
+     * @param {string} key - 存储键名
+     * @param {*} value - 存储值（可 JSON 序列化）
+     * @returns {void}
+     */
     set(key, value) {
       const serialized = serialize(value);
       storageMemory.session[key] = serialized;
@@ -139,7 +185,12 @@ const storage = {
       }
       setCookie(key, serialized);
     },
-    /** @param {string} key 会话 key。@returns {*|null} 解析后的会话数据；解析失败返回 null。 */
+
+    /**
+     * 获取会话存储数据
+     * @param {string} key - 存储键名
+     * @returns {*|null} - 解析后的数据，失败返回 null
+     */
     get(key) {
       const area = getStorageArea('sessionStorage');
       if (canUseStorage(area)) {
@@ -147,7 +198,12 @@ const storage = {
       }
       return parse(storageMemory.session[key]) || parse(getCookie(key));
     },
-    /** @param {string} key 会话 key。@returns {void} */
+
+    /**
+     * 删除会话存储数据
+     * @param {string} key - 存储键名
+     * @returns {void}
+     */
     remove(key) {
       delete storageMemory.session[key];
       const area = getStorageArea('sessionStorage');
@@ -156,7 +212,11 @@ const storage = {
       }
       removeCookie(key);
     },
-    /** @returns {void} 清空当前浏览器会话。 */
+
+    /**
+     * 清空所有会话存储数据
+     * @returns {void}
+     */
     clear() {
       Object.keys(storageMemory.session).forEach((key) => removeCookie(key));
       storageMemory.session = {};
