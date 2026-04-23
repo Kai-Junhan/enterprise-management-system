@@ -1,6 +1,6 @@
 'use strict';
 
-const EnterpriseState = (function() {
+const EnterpriseState = (function () {
   /**
    * 深拷贝模拟业务数据。
    * @param {*} value 需要复制的数据。
@@ -43,14 +43,33 @@ const EnterpriseState = (function() {
      * 原因：旧版本地数据缺字段时不能覆盖整个业务域，否则用户演示数据会丢失。
      */
     function normalize(raw, defaults) {
-      return options.fields.reduce((result, field) => {
-        const storedValue = raw && raw[field.name];
-        const defaultValue = defaults[field.name];
-        result[field.name] = field.type === 'array'
-          ? Array.isArray(storedValue) ? storedValue : defaultValue
-          : storedValue || defaultValue;
-        return result;
-      }, {});
+      const result = {};
+
+      options.fields.forEach((field) => {
+        const fieldName = field.name;
+
+        // 1. 取值
+        const storedValue = raw ? raw[fieldName] : undefined;
+        const defaultValue = defaults[fieldName];
+
+        let finalValue;
+
+        // 2. 根据类型处理
+        if (field.type === 'array') {
+          if (Array.isArray(storedValue)) {
+            finalValue = storedValue;
+          } else {
+            finalValue = defaultValue;
+          }
+        } else {
+          finalValue = storedValue || defaultValue;
+        }
+
+        // 3. 写入结果
+        result[fieldName] = finalValue;
+      });
+
+      return result;
     }
 
     /**
@@ -58,11 +77,21 @@ const EnterpriseState = (function() {
      * @returns {Object} localStorage 状态与默认数据合并后的结果。
      */
     function load() {
+      // 1. 获取存储对象
       const defaults = options.getDefaults();
-      const stored = typeof storage !== 'undefined' && typeof storage.get === 'function'
-        ? storage.get(options.storageKey)
-        : null;
 
+      // 2. 判断 storage 是否可用
+      const hasStorage =
+        typeof storage !== 'undefined' &&
+        typeof storage.get === 'function';
+
+      // 3. 获取存储的数据
+      let stored = null;
+      if (hasStorage) {
+        stored = storage.get(options.storageKey);
+      }
+
+      // 4. 统一处理数据
       return normalize(stored, defaults);
     }
 
