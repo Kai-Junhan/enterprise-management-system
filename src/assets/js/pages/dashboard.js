@@ -388,10 +388,22 @@ window.appPages.dashboard = (function() {
    * @returns {void}
    */
   function initCharts() {
-    if (typeof EnterpriseCharts === 'undefined') return;
+    if (typeof EnterpriseCharts === 'undefined') {
+      console.error('[dashboard] EnterpriseCharts 未定义，图表无法渲染');
+      return;
+    }
 
-    initSalesChart();
-    initEquipmentChart();
+    try {
+      initSalesChart();
+    } catch (e) {
+      console.error('[dashboard] 销售图表渲染失败:', e);
+    }
+
+    try {
+      initEquipmentChart();
+    } catch (e) {
+      console.error('[dashboard] 设备图表渲染失败:', e);
+    }
   }
 
   /**
