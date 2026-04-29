@@ -9,41 +9,44 @@
  */
 const salesData = {
   customers: [
-    { id: 'C001', name: '南京大学继续教育学院', contact: '张主任', phone: '13900001001', email: 'zhang@nju.edu.cn', city: '南京', level: 'VIP', totalAmount: 580000 },
-    { id: 'C002', name: '苏州工业园区科创中心', contact: '李经理', phone: '13900001002', email: 'li@sip-tech.com', city: '苏州', level: '普通', totalAmount: 230000 },
-    { id: 'C003', name: '杭州数字经济研究院', contact: '王院长', phone: '13900001003', email: 'wang@hzde.com', city: '杭州', level: 'VIP', totalAmount: 920000 },
-    { id: 'C004', name: '合肥高新技术企业联盟', contact: '赵秘书长', phone: '13900001004', email: 'zhao@hf-hi.com', city: '合肥', level: '重要', totalAmount: 450000 },
-    { id: 'C005', name: '上海浦东创业孵化器', contact: '陈经理', phone: '13900001005', email: 'chen@pdp-hub.com', city: '上海', level: '普通', totalAmount: 120000 },
+    { id: 'C001', name: '京东自营', contact: '张采销', phone: '13900001001', email: 'zhang@jd.com', city: '北京', level: 'VIP', totalAmount: 5800000 },
+    { id: 'C002', name: '天猫小米之家旗舰店', contact: '李店长', phone: '13900001002', email: 'li@tmall.com', city: '杭州', level: 'VIP', totalAmount: 4200000 },
+    { id: 'C003', name: '苏宁易购', contact: '王采购', phone: '13900001003', email: 'wang@suning.com', city: '南京', level: '重要', totalAmount: 3100000 },
+    { id: 'C004', name: '拼多多百亿补贴', contact: '赵经理', phone: '13900001004', email: 'zhao@pdd.com', city: '上海', level: '重要', totalAmount: 2600000 },
+    { id: 'C005', name: '抖音电商', contact: '陈运营', phone: '13900001005', email: 'chen@douyin.com', city: '北京', level: '普通', totalAmount: 1500000 },
   ],
 
   orders: [
-    { id: 'SO001', customerId: 'C001', customerName: '南京大学继续教育学院', product: '智能ERP系统', quantity: 3, unitPrice: 12000, amount: 36000, status: '已完成', createDate: '2026-03-01', deliveryDate: '2026-03-20' },
-    { id: 'SO002', customerId: 'C003', customerName: '杭州数字经济研究院', product: '企业协同平台', quantity: 5, unitPrice: 8500, amount: 42500, status: '配送中', createDate: '2026-03-05', deliveryDate: '2026-03-25' },
-    { id: 'SO003', customerId: 'C004', customerName: '合肥高新技术企业联盟', product: '智能ERP系统', quantity: 8, unitPrice: 12000, amount: 96000, status: '待发货', createDate: '2026-03-10', deliveryDate: '2026-04-05' },
-    { id: 'SO004', customerId: 'C002', customerName: '苏州工业园区科创中心', product: '数据分析套件', quantity: 2, unitPrice: 18000, amount: 36000, status: '待审核', createDate: '2026-03-15', deliveryDate: '2026-04-10' },
-    { id: 'SO005', customerId: 'C005', customerName: '上海浦东创业孵化器', product: '企业协同平台', quantity: 4, unitPrice: 8500, amount: 34000, status: '已完成', createDate: '2026-02-20', deliveryDate: '2026-03-10' },
+    { id: 'SO001', customerId: 'C001', customerName: '京东自营', product: '小麦手机 Pro', quantity: 2000, unitPrice: 2999, amount: 5998000, status: '已完成', createDate: '2026-03-01', deliveryDate: '2026-03-15' },
+    { id: 'SO002', customerId: 'C002', customerName: '天猫小米之家旗舰店', product: '小麦平板 Air', quantity: 1500, unitPrice: 1999, amount: 2998500, status: '配送中', createDate: '2026-03-05', deliveryDate: '2026-03-20' },
+    { id: 'SO003', customerId: 'C003', customerName: '苏宁易购', product: '小麦笔记本 Ultra', quantity: 800, unitPrice: 5999, amount: 4799200, status: '待发货', createDate: '2026-03-10', deliveryDate: '2026-03-25' },
+    { id: 'SO004', customerId: 'C004', customerName: '拼多多百亿补贴', product: '小麦手表 S2', quantity: 3000, unitPrice: 899, amount: 2697000, status: '待审核', createDate: '2026-03-15', deliveryDate: '2026-04-01' },
+    { id: 'SO005', customerId: 'C005', customerName: '抖音电商', product: '小麦扫地机器人 X1', quantity: 500, unitPrice: 2499, amount: 1249500, status: '已完成', createDate: '2026-02-20', deliveryDate: '2026-03-10' },
   ],
 
   report: {
     monthly: [
-      { month: '2025-10', revenue: 680000, orders: 12, newCustomers: 2 },
-      { month: '2025-11', revenue: 750000, orders: 15, newCustomers: 3 },
-      { month: '2025-12', revenue: 920000, orders: 18, newCustomers: 4 },
-      { month: '2026-01', revenue: 560000, orders: 10, newCustomers: 1 },
-      { month: '2026-02', revenue: 830000, orders: 16, newCustomers: 3 },
-      { month: '2026-03', revenue: 1055400, orders: 22, newCustomers: 5 },
+      { month: '2025-10', revenue: 8500000, orders: 32, newCustomers: 2 },
+      { month: '2025-11', revenue: 12800000, orders: 48, newCustomers: 5 },
+      { month: '2025-12', revenue: 15200000, orders: 56, newCustomers: 3 },
+      { month: '2026-01', revenue: 9600000, orders: 35, newCustomers: 2 },
+      { month: '2026-02', revenue: 11300000, orders: 42, newCustomers: 4 },
+      { month: '2026-03', revenue: 17742200, orders: 65, newCustomers: 6 },
     ]
   },
 
   pricing: [
-    { id: 'PR001', product: '智能ERP系统', standardPrice: 15000, currentPrice: 12000, discount: 0.8, validFrom: '2026-01-01', validTo: '2026-06-30', status: '生效中' },
-    { id: 'PR002', product: '企业协同平台', standardPrice: 10000, currentPrice: 8500, discount: 0.85, validFrom: '2026-01-01', validTo: '2026-06-30', status: '生效中' },
-    { id: 'PR003', product: '数据分析套件', standardPrice: 18000, currentPrice: 18000, discount: 1.0, validFrom: '2026-03-01', validTo: '2026-12-31', status: '生效中' },
+    { id: 'PR001', product: '小麦手机 Pro', standardPrice: 3299, currentPrice: 2999, discount: 0.91, validFrom: '2026-01-01', validTo: '2026-06-30', status: '生效中' },
+    { id: 'PR002', product: '小麦平板 Air', standardPrice: 2299, currentPrice: 1999, discount: 0.87, validFrom: '2026-01-01', validTo: '2026-06-30', status: '生效中' },
+    { id: 'PR003', product: '小麦笔记本 Ultra', standardPrice: 6499, currentPrice: 5999, discount: 0.92, validFrom: '2026-02-01', validTo: '2026-08-31', status: '生效中' },
+    { id: 'PR004', product: '小麦台式电脑 G1', standardPrice: 4999, currentPrice: 4599, discount: 0.92, validFrom: '2026-01-01', validTo: '2026-06-30', status: '生效中' },
+    { id: 'PR005', product: '小麦手表 S2', standardPrice: 999, currentPrice: 899, discount: 0.90, validFrom: '2026-03-01', validTo: '2026-09-30', status: '生效中' },
+    { id: 'PR006', product: '小麦扫地机器人 X1', standardPrice: 2799, currentPrice: 2499, discount: 0.89, validFrom: '2026-01-15', validTo: '2026-07-15', status: '生效中' },
   ],
 
   team: [
-    { id: 'T001', name: '李娜', role: '销售经理', region: '华东', target: 2000000, achieved: 1580000, rate: 0.79 },
-    { id: 'T002', name: '吴静', role: '销售专员', region: '长三角', target: 800000, achieved: 455400, rate: 0.57 },
-    { id: 'T003', name: '刘洋', role: '市场专员', region: '全国', target: 1000000, achieved: 920000, rate: 0.92 },
+    { id: 'T001', name: '李娜', role: '销售经理', region: '华东', target: 30000000, achieved: 25800000, rate: 0.86 },
+    { id: 'T002', name: '吴静', role: '销售专员', region: '华南', target: 15000000, achieved: 11200000, rate: 0.75 },
+    { id: 'T003', name: '刘洋', role: '供应链专员', region: '全国', target: 20000000, achieved: 18500000, rate: 0.93 },
   ]
 };
