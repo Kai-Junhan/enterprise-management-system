@@ -111,10 +111,10 @@ equipmentSystem.pages = (function(store, actions, renderers, view) {
 
     const data = store.sync();
     renderers.stats([
-      { icon: '🏭', value: data.equipment.length, label: '设备总数' },
-      { icon: '✅', value: data.equipment.filter((item) => item.status === '运行中').length, label: '运行中' },
-      { icon: '🔧', value: data.equipment.filter((item) => item.status === '维修中').length, label: '维修中' },
-      { icon: '⚠️', value: data.faults.filter((item) => item.status !== '已解决').length, label: '待处理故障' }
+      { icon: 'building-factory', value: data.equipment.length, label: '设备总数' },
+      { icon: 'circle-check', value: data.equipment.filter((item) => item.status === '运行中').length, label: '运行中' },
+      { icon: 'wrench', value: data.equipment.filter((item) => item.status === '维修中').length, label: '维修中' },
+      { icon: 'alert-triangle', value: data.faults.filter((item) => item.status !== '已解决').length, label: '待处理故障' }
     ]);
 
     view.renderRows(tbody, data.equipment, renderEquipmentSummaryRow, { colspan: 6, text: '暂无设备' });
@@ -133,10 +133,10 @@ equipmentSystem.pages = (function(store, actions, renderers, view) {
       const filtered = keyword ? view.filterByKeyword(list, keyword, ['name', 'model', 'location']) : list;
 
       renderers.stats([
-        { icon: '🏭', value: list.length, label: '设备总数' },
-        { icon: '✅', value: list.filter((item) => item.status === '运行中').length, label: '运行中' },
-        { icon: '🔧', value: list.filter((item) => item.status === '维修中').length, label: '维修中' },
-        { icon: '🛑', value: list.filter((item) => item.status === '停机').length, label: '停机' }
+        { icon: 'building-factory', value: list.length, label: '设备总数' },
+        { icon: 'circle-check', value: list.filter((item) => item.status === '运行中').length, label: '运行中' },
+        { icon: 'wrench', value: list.filter((item) => item.status === '维修中').length, label: '维修中' },
+        { icon: 'player-stop', value: list.filter((item) => item.status === '停机').length, label: '停机' }
       ]);
 
       view.renderRows(tbody, filtered, renderEquipmentMonitorRow, { colspan: 8, text: '暂无设备监控数据' });
@@ -348,10 +348,10 @@ equipmentSystem.pages = (function(store, actions, renderers, view) {
       const filtered = keyword ? view.filterByKeyword(list, keyword, ['equipName', 'type']) : list;
 
       renderers.stats([
-        { icon: '📋', value: list.length, label: '维护计划总数' },
+        { icon: 'clipboard-list', value: list.length, label: '维护计划总数' },
         { icon: '⏳', value: list.filter((item) => item.status === '待执行').length, label: '待执行' },
-        { icon: '🔧', value: list.filter((item) => item.status === '进行中').length, label: '进行中' },
-        { icon: '💰', value: formatMoney(list.reduce((sum, item) => sum + item.cost, 0)), label: '预估总费用' }
+        { icon: 'wrench', value: list.filter((item) => item.status === '进行中').length, label: '进行中' },
+        { icon: 'currency-dollar', value: formatMoney(list.reduce((sum, item) => sum + item.cost, 0)), label: '预估总费用' }
       ]);
 
       view.renderRows(tbody, filtered, renderMaintenanceRow, { colspan: 8, text: '暂无维护计划' });
@@ -441,9 +441,9 @@ equipmentSystem.pages = (function(store, actions, renderers, view) {
       const filtered = keyword ? view.filterByKeyword(list, keyword, ['equipName', 'description', 'handler']) : list;
 
       renderers.stats([
-        { icon: '⚠️', value: list.length, label: '故障总数' },
-        { icon: '🔴', value: list.filter((item) => item.status !== '已解决').length, label: '未解决' },
-        { icon: '🚨', value: list.filter((item) => item.severity === '严重').length, label: '严重故障' }
+        { icon: 'alert-triangle', value: list.length, label: '故障总数' },
+        { icon: 'circle-filled', value: list.filter((item) => item.status !== '已解决').length, label: '未解决' },
+        { icon: 'bell-ringing', value: list.filter((item) => item.severity === '严重').length, label: '严重故障' }
       ]);
 
       view.renderRows(tbody, filtered, renderFaultRow, { colspan: 8, text: '暂无故障记录' });

@@ -235,7 +235,7 @@ window.appPages.dashboard = (function() {
 
     if (welcomeGreeting) {
       var name = user ? user.username : '管理员';
-      welcomeGreeting.innerHTML = greeting + '，<span id="welcome-name">' + name + '</span> 👋';
+      welcomeGreeting.innerHTML = greeting + '，<span id="welcome-name">' + name + '</span> ' + renderIcon('👋');
     }
 
     if (welcomeTime) {
@@ -293,17 +293,17 @@ window.appPages.dashboard = (function() {
     var taskRate = tasks.length > 0 ? Math.round(completedTasks / tasks.length * 100) : 0;
 
     var stats = [
-      { icon: '👥', value: totalEmployees, label: '总员工数' },
-      { icon: '💰', value: formatMoney(monthlyRevenue), label: '在手订单金额' },
-      { icon: '⚙️', value: equipRate + '%', label: '设备运行率' },
-      { icon: '📋', value: pendingOrders, label: '待处理工单' },
-      { icon: '⚠️', value: warnings, label: '库存预警' },
-      { icon: '✅', value: taskRate + '%', label: '生产完成率' }
+      { icon: 'users', value: totalEmployees, label: '总员工数' },
+      { icon: 'currency-dollar', value: formatMoney(monthlyRevenue), label: '在手订单金额' },
+      { icon: 'settings', value: equipRate + '%', label: '设备运行率' },
+      { icon: 'clipboard-list', value: pendingOrders, label: '待处理工单' },
+      { icon: 'alert-triangle', value: warnings, label: '库存预警' },
+      { icon: 'circle-check', value: taskRate + '%', label: '生产完成率' }
     ];
 
     statsEl.innerHTML = stats.map(function(item, index) {
       return '<div class="stat-card slide-up delay-' + ((index % 4) * 100) + '">' +
-        '<div class="stat-icon">' + item.icon + '</div>' +
+        '<div class="stat-icon">' + renderIcon(item.icon) + '</div>' +
         '<div class="stat-info">' +
           '<div class="stat-value">' + item.value + '</div>' +
           '<div class="stat-label">' + item.label + '</div>' +
@@ -375,7 +375,7 @@ window.appPages.dashboard = (function() {
     }
 
     alertsEl.innerHTML =
-      '<div class="alerts-title">📌 待办提醒</div>' +
+      '<div class="alerts-title">' + renderIcon('📌') + ' 待办提醒</div>' +
       '<div class="alerts-list">' +
       alerts.map(function(a) {
         return '<span class="alert-tag alert-' + a.type + '">' + a.text + '</span>';

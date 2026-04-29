@@ -40,10 +40,10 @@ employeeSystem.pages = (function(store, actions, renderers, view) {
   // 统计员工总数、在职人数、试用期人数和部门数。
   function renderEmployeeStats(list) {
     renderers.stats([
-      { icon: '👥', value: list.length, label: '员工总数' },
-      { icon: '✅', value: list.filter((item) => item.status === '在职').length, label: '在职员工' },
-      { icon: '🕐', value: list.filter((item) => item.status === '试用期').length, label: '试用期员工' },
-      { icon: '🏢', value: new Set(list.map((item) => item.dept)).size, label: '部门数量' }
+      { icon: 'users', value: list.length, label: '员工总数' },
+      { icon: 'circle-check', value: list.filter((item) => item.status === '在职').length, label: '在职员工' },
+      { icon: 'clock', value: list.filter((item) => item.status === '试用期').length, label: '试用期员工' },
+      { icon: 'building', value: new Set(list.map((item) => item.dept)).size, label: '部门数量' }
     ]);
   }
 
@@ -258,10 +258,10 @@ employeeSystem.pages = (function(store, actions, renderers, view) {
       const filtered = keyword ? view.filterByKeyword(list, keyword, ['empId', 'empName']) : list;
 
       renderers.stats([
-        { icon: '👥', value: list.length, label: '统计人数' },
-        { icon: '📅', value: list.reduce((sum, item) => sum + item.actualDays, 0), label: '总出勤天数' },
-        { icon: '⏰', value: list.reduce((sum, item) => sum + item.overtimeHours, 0) + 'h', label: '总加班时长' },
-        { icon: '⚠️', value: list.reduce((sum, item) => sum + item.lateTimes, 0), label: '迟到次数' }
+        { icon: 'users', value: list.length, label: '统计人数' },
+        { icon: 'calendar', value: list.reduce((sum, item) => sum + item.actualDays, 0), label: '总出勤天数' },
+        { icon: 'alarm', value: list.reduce((sum, item) => sum + item.overtimeHours, 0) + 'h', label: '总加班时长' },
+        { icon: 'alert-triangle', value: list.reduce((sum, item) => sum + item.lateTimes, 0), label: '迟到次数' }
       ]);
       view.renderRows(tbody, filtered, renderAttendanceRow, { colspan: 9, text: '暂无考勤记录' });
     }
@@ -350,9 +350,9 @@ employeeSystem.pages = (function(store, actions, renderers, view) {
       const aCount = list.filter((item) => String(item.grade).startsWith('A')).length;
 
       renderers.stats([
-        { icon: '📊', value: list.length, label: '参评人数' },
-        { icon: '⭐', value: average, label: '平均分' },
-        { icon: '🏆', value: aCount, label: 'A级人数' }
+        { icon: 'chart-bar', value: list.length, label: '参评人数' },
+        { icon: 'star', value: average, label: '平均分' },
+        { icon: 'trophy', value: aCount, label: 'A级人数' }
       ]);
       view.renderRows(tbody, filtered, renderPerformanceRow, { colspan: 8, text: '暂无绩效记录' });
     }
@@ -432,10 +432,10 @@ employeeSystem.pages = (function(store, actions, renderers, view) {
     function render() {
       const list = store.sync().recruitment;
       renderers.stats([
-        { icon: '📋', value: list.length, label: '招聘计划' },
-        { icon: '🟢', value: list.filter((item) => item.status === '招聘中').length, label: '招聘中' },
-        { icon: '👤', value: list.reduce((sum, item) => sum + item.headcount, 0), label: '招聘总人数' },
-        { icon: '📨', value: list.reduce((sum, item) => sum + item.applicants, 0), label: '总投递数' }
+        { icon: 'clipboard-list', value: list.length, label: '招聘计划' },
+        { icon: 'circle-dot', value: list.filter((item) => item.status === '招聘中').length, label: '招聘中' },
+        { icon: 'user', value: list.reduce((sum, item) => sum + item.headcount, 0), label: '招聘总人数' },
+        { icon: 'mail', value: list.reduce((sum, item) => sum + item.applicants, 0), label: '总投递数' }
       ]);
       view.renderRows(tbody, list, renderRecruitmentRow, { colspan: 9, text: '暂无招聘计划' });
     }

@@ -160,10 +160,10 @@ purchaseSystem.pages = (function(store, actions, renderers, view) {
 
     const data = store.sync();
     renderers.stats([
-      { icon: '🤝', value: data.suppliers.filter((item) => item.status === '合作中').length, label: '合作供应商' },
-      { icon: '📋', value: data.orders.length, label: '采购订单' },
-      { icon: '💰', value: formatMoney(data.orders.reduce((sum, item) => sum + item.amount, 0)), label: '采购总额' },
-      { icon: '✅', value: data.orders.filter((item) => item.status === '已到货').length, label: '已到货' }
+      { icon: 'user-handshake', value: data.suppliers.filter((item) => item.status === '合作中').length, label: '合作供应商' },
+      { icon: 'clipboard-list', value: data.orders.length, label: '采购订单' },
+      { icon: 'currency-dollar', value: formatMoney(data.orders.reduce((sum, item) => sum + item.amount, 0)), label: '采购总额' },
+      { icon: 'circle-check', value: data.orders.filter((item) => item.status === '已到货').length, label: '已到货' }
     ]);
 
     view.renderRows(tbody, data.orders, renderPurchaseIndexRow, { colspan: 6, text: '暂无采购订单' });
@@ -229,9 +229,9 @@ purchaseSystem.pages = (function(store, actions, renderers, view) {
       const suppliers = store.sync().suppliers;
       const active = suppliers.filter((item) => item.status === '合作中').length;
       renderers.stats([
-        { icon: '🤝', value: suppliers.length, label: '供应商总数' },
-        { icon: '✅', value: active, label: '合作中' },
-        { icon: '⏸️', value: suppliers.length - active, label: '已暂停' }
+        { icon: 'user-handshake', value: suppliers.length, label: '供应商总数' },
+        { icon: 'circle-check', value: active, label: '合作中' },
+        { icon: 'player-pause', value: suppliers.length - active, label: '已暂停' }
       ]);
 
       view.renderRows(tbody, list, renderSupplierRow, { colspan: 8, text: '暂无供应商' });
@@ -322,9 +322,9 @@ purchaseSystem.pages = (function(store, actions, renderers, view) {
     function render(list) {
       const orders = store.sync().orders;
       renderers.stats([
-        { icon: '📋', value: orders.length, label: '订单总数' },
-        { icon: '💰', value: formatMoney(orders.reduce((sum, item) => sum + item.amount, 0)), label: '采购总额' },
-        { icon: '✅', value: orders.filter((item) => item.status === '已到货').length, label: '已到货' }
+        { icon: 'clipboard-list', value: orders.length, label: '订单总数' },
+        { icon: 'currency-dollar', value: formatMoney(orders.reduce((sum, item) => sum + item.amount, 0)), label: '采购总额' },
+        { icon: 'circle-check', value: orders.filter((item) => item.status === '已到货').length, label: '已到货' }
       ]);
 
       view.renderRows(tbody, list, renderProcessRow, { colspan: 10, text: '暂无采购流程记录' });
@@ -368,9 +368,9 @@ purchaseSystem.pages = (function(store, actions, renderers, view) {
       const filtered = keyword ? view.filterByKeyword(orders, keyword, ['supplierName', 'item']) : orders;
 
       renderers.stats([
-        { icon: '🚚', value: orders.filter((item) => item.status === '运输中').length, label: '运输中' },
+        { icon: 'truck', value: orders.filter((item) => item.status === '运输中').length, label: '运输中' },
         { icon: '⏳', value: orders.filter((item) => item.status === '待发货' || item.status === '待审核').length, label: '待发货/待审核' },
-        { icon: '✅', value: orders.filter((item) => item.status === '已到货').length, label: '已到货' }
+        { icon: 'circle-check', value: orders.filter((item) => item.status === '已到货').length, label: '已到货' }
       ]);
 
       view.renderRows(tbody, filtered, renderTrackingRow, { colspan: 7, text: '暂无到货跟踪' });
@@ -396,10 +396,10 @@ purchaseSystem.pages = (function(store, actions, renderers, view) {
     const avgAmount = monthly.length ? Math.round(totalAmount / monthly.length) : 0;
 
     renderers.stats([
-      { icon: '💰', value: formatMoney(totalAmount), label: '6个月采购总额' },
-      { icon: '📋', value: totalOrders, label: '6个月总订单数' },
-      { icon: '📈', value: formatMoney(maxAmount), label: '单月最高采购额' },
-      { icon: '📊', value: formatMoney(avgAmount), label: '月均采购额' }
+      { icon: 'currency-dollar', value: formatMoney(totalAmount), label: '6个月采购总额' },
+      { icon: 'clipboard-list', value: totalOrders, label: '6个月总订单数' },
+      { icon: 'chart-line', value: formatMoney(maxAmount), label: '单月最高采购额' },
+      { icon: 'chart-bar', value: formatMoney(avgAmount), label: '月均采购额' }
     ]);
 
     view.renderRows(analysisBody, monthly, renderMonthlyAnalysisRow(maxAmount), { colspan: 4, text: '暂无采购分析数据' });

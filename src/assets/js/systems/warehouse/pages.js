@@ -227,10 +227,10 @@ warehouseSystem.pages = (function(store, actions, renderers, view) {
       const keyword = view.getTrimmedValue('search-input');
       const inventory = keyword ? view.filterByKeyword(data.inventory, keyword, ['name', 'category', 'location']) : data.inventory;
       renderers.stats([
-        { icon: '📦', value: data.inventory.length, label: '库存品类' },
-        { icon: '⚠️', value: data.inventory.filter((item) => item.stock < item.minStock).length, label: '库存预警' },
-        { icon: '📥', value: data.inbound.length, label: '近期入库' },
-        { icon: '📤', value: data.outbound.length, label: '近期出库' }
+        { icon: 'package', value: data.inventory.length, label: '库存品类' },
+        { icon: 'alert-triangle', value: data.inventory.filter((item) => item.stock < item.minStock).length, label: '库存预警' },
+        { icon: 'inbox', value: data.inbound.length, label: '近期入库' },
+        { icon: 'outbox', value: data.outbound.length, label: '近期出库' }
       ]);
       view.renderRows(tbody, list || inventory, renderInventoryRow, { colspan: 8, text: '暂无库存数据' });
 
@@ -308,9 +308,9 @@ warehouseSystem.pages = (function(store, actions, renderers, view) {
       const avgUsage = totalCap ? ((totalUsed / totalCap) * 100).toFixed(1) : '0.0';
 
       renderers.stats([
-        { icon: '🗺️', value: data.locations.length, label: '货位数量' },
-        { icon: '📦', value: totalCap, label: '总容量' },
-        { icon: '📊', value: avgUsage + '%', label: '平均使用率' }
+        { icon: 'map', value: data.locations.length, label: '货位数量' },
+        { icon: 'package', value: totalCap, label: '总容量' },
+        { icon: 'chart-bar', value: avgUsage + '%', label: '平均使用率' }
       ]);
 
       view.renderRows(layoutBody, locations, renderLocationRow, { colspan: 8, text: '暂无货位数据' });
@@ -399,10 +399,10 @@ warehouseSystem.pages = (function(store, actions, renderers, view) {
       const outbound = keyword ? view.filterByKeyword(data.outbound, keyword, ['item', 'customer']) : data.outbound;
 
       renderers.stats([
-        { icon: '📥', value: data.inbound.length, label: '入库单数' },
-        { icon: '📤', value: data.outbound.length, label: '出库单数' },
-        { icon: '📦', value: data.inbound.reduce((sum, item) => sum + item.quantity, 0), label: '入库总量' },
-        { icon: '🚚', value: data.outbound.reduce((sum, item) => sum + item.quantity, 0), label: '出库总量' }
+        { icon: 'inbox', value: data.inbound.length, label: '入库单数' },
+        { icon: 'outbox', value: data.outbound.length, label: '出库单数' },
+        { icon: 'package', value: data.inbound.reduce((sum, item) => sum + item.quantity, 0), label: '入库总量' },
+        { icon: 'truck', value: data.outbound.reduce((sum, item) => sum + item.quantity, 0), label: '出库总量' }
       ]);
       view.renderRows(inboundBody, inbound, renderInboundRow, { colspan: 6, text: '暂无入库记录' });
       view.renderRows(outboundBody, outbound, renderOutboundRow, { colspan: 6, text: '暂无出库记录' });
@@ -443,10 +443,10 @@ warehouseSystem.pages = (function(store, actions, renderers, view) {
       const inbound = keyword ? view.filterByKeyword(data.inbound, keyword, ['item', 'supplier']) : data.inbound;
 
       renderers.stats([
-        { icon: '📤', value: data.outbound.length, label: '出库单数' },
-        { icon: '🚚', value: data.outbound.reduce((sum, item) => sum + item.quantity, 0), label: '出库总量' },
-        { icon: '📥', value: data.inbound.length, label: '入库单数' },
-        { icon: '📦', value: data.inbound.reduce((sum, item) => sum + item.quantity, 0), label: '入库总量' }
+        { icon: 'outbox', value: data.outbound.length, label: '出库单数' },
+        { icon: 'truck', value: data.outbound.reduce((sum, item) => sum + item.quantity, 0), label: '出库总量' },
+        { icon: 'inbox', value: data.inbound.length, label: '入库单数' },
+        { icon: 'package', value: data.inbound.reduce((sum, item) => sum + item.quantity, 0), label: '入库总量' }
       ]);
 
       view.renderRows(transportBody, outbound, renderTransportRow(today), { colspan: 7, text: '暂无运输记录' });
@@ -473,9 +473,9 @@ warehouseSystem.pages = (function(store, actions, renderers, view) {
       const normalItems = filtered.filter((item) => item.stock >= item.minStock);
 
       renderers.stats([
-        { icon: '📦', value: inventory.length, label: '库存品类' },
-        { icon: '⚠️', value: inventory.filter((item) => item.stock < item.minStock).length, label: '预警品类' },
-        { icon: '✅', value: inventory.filter((item) => item.stock >= item.minStock).length, label: '库存正常' }
+        { icon: 'package', value: inventory.length, label: '库存品类' },
+        { icon: 'alert-triangle', value: inventory.filter((item) => item.stock < item.minStock).length, label: '预警品类' },
+        { icon: 'circle-check', value: inventory.filter((item) => item.stock >= item.minStock).length, label: '库存正常' }
       ]);
 
       view.renderRows(warningBody, lowItems, renderWarningRow, { colspan: 8, text: '暂无库存预警' });

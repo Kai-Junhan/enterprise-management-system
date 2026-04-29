@@ -116,10 +116,10 @@ salesSystem.pages = (function(store, actions, renderers, view) {
 
     const data = store.sync();
     renderers.stats([
-      { icon: '💰', value: formatMoney(data.orders.reduce((sum, item) => sum + item.amount, 0)), label: '本月销售额' },
-      { icon: '📋', value: data.orders.length, label: '订单总数' },
-      { icon: '✅', value: data.orders.filter((item) => item.status === '已完成').length, label: '已完成订单' },
-      { icon: '⭐', value: data.customers.filter((item) => item.level === 'VIP').length, label: 'VIP客户' }
+      { icon: 'currency-dollar', value: formatMoney(data.orders.reduce((sum, item) => sum + item.amount, 0)), label: '本月销售额' },
+      { icon: 'clipboard-list', value: data.orders.length, label: '订单总数' },
+      { icon: 'circle-check', value: data.orders.filter((item) => item.status === '已完成').length, label: '已完成订单' },
+      { icon: 'star', value: data.customers.filter((item) => item.level === 'VIP').length, label: 'VIP客户' }
     ]);
 
     view.renderRows(tbody, data.orders.slice(0, 5), renderSalesIndexRow, { colspan: 5, text: '暂无销售订单' });
@@ -184,9 +184,9 @@ salesSystem.pages = (function(store, actions, renderers, view) {
     function render(list) {
       const customers = store.sync().customers;
       renderers.stats([
-        { icon: '🤝', value: customers.length, label: '客户总数' },
-        { icon: '⭐', value: customers.filter((item) => item.level === 'VIP').length, label: 'VIP客户' },
-        { icon: '💰', value: formatMoney(customers.reduce((sum, item) => sum + item.totalAmount, 0)), label: '累计销售额' }
+        { icon: 'user-handshake', value: customers.length, label: '客户总数' },
+        { icon: 'star', value: customers.filter((item) => item.level === 'VIP').length, label: 'VIP客户' },
+        { icon: 'currency-dollar', value: formatMoney(customers.reduce((sum, item) => sum + item.totalAmount, 0)), label: '累计销售额' }
       ]);
       view.renderRows(tbody, list, renderCustomerRow, { colspan: 8, text: '暂无客户' });
     }
@@ -272,9 +272,9 @@ salesSystem.pages = (function(store, actions, renderers, view) {
     function render(list) {
       const orders = store.sync().orders;
       renderers.stats([
-        { icon: '📋', value: orders.length, label: '订单总数' },
-        { icon: '💰', value: formatMoney(orders.reduce((sum, item) => sum + item.amount, 0)), label: '订单总额' },
-        { icon: '✅', value: orders.filter((item) => item.status === '已完成').length, label: '已完成' }
+        { icon: 'clipboard-list', value: orders.length, label: '订单总数' },
+        { icon: 'currency-dollar', value: formatMoney(orders.reduce((sum, item) => sum + item.amount, 0)), label: '订单总额' },
+        { icon: 'circle-check', value: orders.filter((item) => item.status === '已完成').length, label: '已完成' }
       ]);
       view.renderRows(tbody, list, renderOrderRow, { colspan: 10, text: '暂无销售订单' });
     }
@@ -389,9 +389,9 @@ salesSystem.pages = (function(store, actions, renderers, view) {
     const maxRevenue = Math.max.apply(null, monthly.map((item) => item.revenue).concat([0]));
 
     renderers.stats([
-      { icon: '💰', value: formatMoney(totalRevenue), label: '6个月总销售额' },
-      { icon: '📋', value: totalOrders, label: '6个月总订单数' },
-      { icon: '📈', value: formatMoney(maxRevenue), label: '单月最高销售额' }
+      { icon: 'currency-dollar', value: formatMoney(totalRevenue), label: '6个月总销售额' },
+      { icon: 'clipboard-list', value: totalOrders, label: '6个月总订单数' },
+      { icon: 'chart-line', value: formatMoney(maxRevenue), label: '单月最高销售额' }
     ]);
 
     view.renderRows(tbody, monthly, renderMonthlyReportRow(maxRevenue), { colspan: 5, text: '暂无销售报表' });
@@ -441,10 +441,10 @@ salesSystem.pages = (function(store, actions, renderers, view) {
     const avgRate = totalTarget ? ((totalAchieved / totalTarget) * 100).toFixed(1) : '0.0';
 
     renderers.stats([
-      { icon: '👥', value: team.length, label: '团队人数' },
-      { icon: '🎯', value: formatMoney(totalTarget), label: '团队目标' },
-      { icon: '💰', value: formatMoney(totalAchieved), label: '已完成' },
-      { icon: '📊', value: avgRate + '%', label: '平均完成率' }
+      { icon: 'users', value: team.length, label: '团队人数' },
+      { icon: 'target', value: formatMoney(totalTarget), label: '团队目标' },
+      { icon: 'currency-dollar', value: formatMoney(totalAchieved), label: '已完成' },
+      { icon: 'chart-bar', value: avgRate + '%', label: '平均完成率' }
     ]);
 
     view.renderRows(tbody, team, renderTeamRow, { colspan: 7, text: '暂无销售团队数据' });

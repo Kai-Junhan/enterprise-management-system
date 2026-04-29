@@ -130,10 +130,10 @@ productionSystem.pages = (function(store, actions, renderers, view) {
 
     const data = store.sync();
     renderers.stats([
-      { icon: '📅', value: data.plans.length, label: '生产计划' },
-      { icon: '⚡', value: data.plans.filter((item) => item.status === '进行中').length, label: '进行中计划' },
-      { icon: '📋', value: data.orders.filter((item) => item.status !== '已完成').length, label: '待完成订单' },
-      { icon: '⚠️', value: data.materials.filter((item) => item.shortage > 0).length, label: '物料短缺项' }
+      { icon: 'calendar', value: data.plans.length, label: '生产计划' },
+      { icon: 'zap', value: data.plans.filter((item) => item.status === '进行中').length, label: '进行中计划' },
+      { icon: 'clipboard-list', value: data.orders.filter((item) => item.status !== '已完成').length, label: '待完成订单' },
+      { icon: 'alert-triangle', value: data.materials.filter((item) => item.shortage > 0).length, label: '物料短缺项' }
     ]);
 
     view.renderRows(tbody, data.tasks, renderTaskRow, { colspan: 6, text: '暂无生产任务' });
@@ -308,9 +308,9 @@ productionSystem.pages = (function(store, actions, renderers, view) {
     function render(list) {
       const materials = store.sync().materials;
       renderers.stats([
-        { icon: '📦', value: materials.length, label: '物料种类' },
-        { icon: '✅', value: materials.filter((item) => item.shortage === 0).length, label: '库存充足' },
-        { icon: '⚠️', value: materials.filter((item) => item.shortage > 0).length, label: '库存短缺' }
+        { icon: 'package', value: materials.length, label: '物料种类' },
+        { icon: 'circle-check', value: materials.filter((item) => item.shortage === 0).length, label: '库存充足' },
+        { icon: 'alert-triangle', value: materials.filter((item) => item.shortage > 0).length, label: '库存短缺' }
       ]);
       view.renderRows(tbody, list, renderMaterialRow, { colspan: 9, text: '暂无物料需求' });
     }
@@ -396,9 +396,9 @@ productionSystem.pages = (function(store, actions, renderers, view) {
     function render(list) {
       const orders = store.sync().orders;
       renderers.stats([
-        { icon: '📋', value: orders.length, label: '订单总数' },
-        { icon: '⚡', value: orders.filter((item) => item.status === '生产中').length, label: '生产中' },
-        { icon: '✅', value: orders.filter((item) => item.status === '已完成').length, label: '已完成' }
+        { icon: 'clipboard-list', value: orders.length, label: '订单总数' },
+        { icon: 'zap', value: orders.filter((item) => item.status === '生产中').length, label: '生产中' },
+        { icon: 'circle-check', value: orders.filter((item) => item.status === '已完成').length, label: '已完成' }
       ]);
       view.renderRows(tbody, list, renderOrderRow, { colspan: 8, text: '暂无生产订单' });
     }
@@ -555,10 +555,10 @@ productionSystem.pages = (function(store, actions, renderers, view) {
       const passRate = records.length ? ((passed / records.length) * 100).toFixed(1) : '0.0';
 
       renderers.stats([
-        { icon: '🔍', value: records.length, label: '质检总数' },
-        { icon: '✅', value: passed, label: '合格' },
-        { icon: '❌', value: failed, label: '不合格' },
-        { icon: '📊', value: passRate + '%', label: '合格率' }
+        { icon: 'search', value: records.length, label: '质检总数' },
+        { icon: 'circle-check', value: passed, label: '合格' },
+        { icon: 'x', value: failed, label: '不合格' },
+        { icon: 'chart-bar', value: passRate + '%', label: '合格率' }
       ]);
       view.renderRows(tbody, list, renderQualityRow, { colspan: 7, text: '暂无质检记录' });
     }
