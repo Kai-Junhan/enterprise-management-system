@@ -160,9 +160,9 @@ productionSystem.pages = (function(store, actions, renderers, view) {
     if (planCanvas && typeof EnterpriseCharts !== 'undefined') {
       var pDraw = function() {
         EnterpriseCharts.barChart(planCanvas, {
-          labels: data.plans.map(function(p) { return p.product || p.id; }),
+          labels: data.plans.map(function(p) { return p.name || p.id; }),
           values: data.plans.map(function(p) { return Number(p.progress) || 0; }),
-          color: getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() || '#4f6ef7'
+          colors: [getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() || '#FF6B00']
         });
       };
       pDraw();

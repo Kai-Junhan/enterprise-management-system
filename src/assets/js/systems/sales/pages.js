@@ -403,7 +403,7 @@ salesSystem.pages = (function(store, actions, renderers, view) {
         EnterpriseCharts.barChart(revenueCanvas, {
           labels: monthly.map(function(m) { return m.month; }),
           values: monthly.map(function(m) { return m.revenue; }),
-          color: getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() || '#4f6ef7'
+          colors: [getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() || '#FF6B00']
         });
       };
       rDraw();
@@ -416,8 +416,11 @@ salesSystem.pages = (function(store, actions, renderers, view) {
       var oDraw = function() {
         EnterpriseCharts.lineChart(ordersCanvas, {
           labels: monthly.map(function(m) { return m.month; }),
-          values: monthly.map(function(m) { return m.orders; }),
-          color: getComputedStyle(document.documentElement).getPropertyValue('--color-success').trim() || '#22c55e'
+          datasets: [{
+            values: monthly.map(function(m) { return m.orders; }),
+            label: '订单数',
+            color: getComputedStyle(document.documentElement).getPropertyValue('--color-success').trim() || '#22c55e'
+          }]
         });
       };
       oDraw();

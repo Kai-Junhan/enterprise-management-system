@@ -6,14 +6,14 @@
  *
  * 原因：项目保持零框架原则，使用 Canvas 2D API 替代 Chart.js 等库。
  */
-const EnterpriseCharts = (function() {
+const EnterpriseCharts = (function () {
   /** 默认颜色板，与项目 CSS 变量对应 */
   var COLORS = [
     '#FF6B00', '#1890ff', '#52c41a', '#faad14', '#f5222d',
     '#722ed1', '#13c2c2', '#eb2f96', '#95de64', '#ffc53d'
   ];
 
-  /**
+  /*
    * 获取 CSS 变量值。
    * @param {string} name CSS 变量名（含 --）。
    * @param {string} fallback 回退值。
@@ -29,8 +29,10 @@ const EnterpriseCharts = (function() {
 
   /**
    * 解析颜色：支持 CSS 变量名或直接色值。
-   * @param {string} color
-   * @returns {string}
+   * @param {string} color CSS 变量名或直接色值。
+   * @returns {string} 解析后的色值。
+   *
+   * 原因：业务页可传入 --color-primary 等变量名或 #FF6B00 等直接色值，统一解析后图表模块无需关心来源。
    */
   function resolveColor(color) {
     if (color && color.startsWith('--')) {
@@ -46,9 +48,20 @@ const EnterpriseCharts = (function() {
    */
   function fitCanvas(canvas) {
     var dpr = window.devicePixelRatio || 1;
-    var rect = canvas.parentElement ? canvas.parentElement.getBoundingClientRect() : { width: canvas.width, height: canvas.height };
-    var w = rect.width || 300;
-    var h = rect.height || 200;
+    var parent = canvas.parentElement;
+    var w, h;
+
+    if (parent) {
+      var style = getComputedStyle(parent);
+      var padX = (parseFloat(style.paddingLeft) || 0) + (parseFloat(style.paddingRight) || 0);
+      var padY = (parseFloat(style.paddingTop) || 0) + (parseFloat(style.paddingBottom) || 0);
+      var rect = parent.getBoundingClientRect();
+      w = (rect.width - padX) || 300;
+      h = (rect.height - padY) || 200;
+    } else {
+      w = canvas.width || 300;
+      h = canvas.height || 200;
+    }
 
     canvas.width = w * dpr;
     canvas.height = h * dpr;
@@ -188,7 +201,7 @@ const EnterpriseCharts = (function() {
 
     if (n === 0) return;
 
-    var total = values.reduce(function(s, v) { return s + v; }, 0);
+    var total = values.reduce(function (s, v) { return s + v; }, 0);
     if (total === 0) return;
 
     var padding = { top: title ? 44 : 20, right: 20, bottom: 20, left: 20 };
@@ -299,7 +312,7 @@ const EnterpriseCharts = (function() {
     if (!labels.length || !datasets.length) return;
 
     /* 规范化数据集 */
-    var series = datasets.map(function(ds, idx) {
+    var series = datasets.map(function (ds, idx) {
       if (Array.isArray(ds)) {
         return { values: ds, label: '系列' + (idx + 1), color: COLORS[idx % COLORS.length] };
       }
@@ -312,8 +325,8 @@ const EnterpriseCharts = (function() {
 
     var n = labels.length;
     var allVals = [];
-    series.forEach(function(s) {
-      s.values.forEach(function(v) { allVals.push(v); });
+    series.forEach(function (s) {
+      s.values.forEach(function (v) { allVals.push(v); });
     });
     var maxVal = Math.max.apply(null, allVals) || 1;
     maxVal = Math.ceil(maxVal * 1.15);
@@ -341,7 +354,7 @@ const EnterpriseCharts = (function() {
       ctx.textAlign = 'left';
       ctx.font = getCSSVar('--font-size-xs', '12px') + ' sans-serif';
 
-      series.forEach(function(s, idx) {
+      series.forEach(function (s, idx) {
         var lx = legendX + idx * 100;
         ctx.fillStyle = s.color;
         ctx.fillRect(lx, legendY - 5, 10, 10);
@@ -376,7 +389,7 @@ const EnterpriseCharts = (function() {
     }
 
     /* 折线 */
-    series.forEach(function(s) {
+    series.forEach(function (s) {
       var points = [];
       for (var p = 0; p < Math.min(s.values.length, n); p++) {
         var px = padding.left + (n > 1 ? (p / (n - 1)) * chartW : chartW / 2);
@@ -388,7 +401,7 @@ const EnterpriseCharts = (function() {
       if (showArea && points.length > 1) {
         ctx.beginPath();
         ctx.moveTo(points[0].x, padding.top + chartH);
-        points.forEach(function(pt) { ctx.lineTo(pt.x, pt.y); });
+        points.forEach(function (pt) { ctx.lineTo(pt.x, pt.y); });
         ctx.lineTo(points[points.length - 1].x, padding.top + chartH);
         ctx.closePath();
         ctx.fillStyle = s.color + '20';
@@ -400,14 +413,14 @@ const EnterpriseCharts = (function() {
       ctx.strokeStyle = s.color;
       ctx.lineWidth = 2.5;
       ctx.lineJoin = 'round';
-      points.forEach(function(pt, idx) {
+      points.forEach(function (pt, idx) {
         if (idx === 0) ctx.moveTo(pt.x, pt.y);
         else ctx.lineTo(pt.x, pt.y);
       });
       ctx.stroke();
 
       /* 数据点 */
-      points.forEach(function(pt) {
+      points.forEach(function (pt) {
         ctx.beginPath();
         ctx.arc(pt.x, pt.y, 3.5, 0, Math.PI * 2);
         ctx.fillStyle = '#fff';
@@ -462,7 +475,7 @@ const EnterpriseCharts = (function() {
   function autoResize(canvas, drawFn) {
     if (!window.ResizeObserver) return null;
 
-    var observer = new ResizeObserver(function() {
+    var observer = new ResizeObserver(function () {
       drawFn();
     });
 

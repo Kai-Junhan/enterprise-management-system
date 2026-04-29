@@ -411,7 +411,7 @@ purchaseSystem.pages = (function(store, actions, renderers, view) {
 
     // 绘制月度采购趋势柱状图。
     var chartCanvas = document.getElementById('purchase-trend-chart');
-    if (chartCanvas) {
+    if (chartCanvas && typeof EnterpriseCharts !== 'undefined') {
       var labels = monthly.map(function(m) {
         var parts = m.month.split('-');
         return parts[1] + '月';
