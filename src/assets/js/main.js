@@ -79,6 +79,9 @@ async function initSharedRuntime(pageMeta) {
   await appShell.loadPageShell(pageMeta);
   await appShell.ensureMobileNav(pageMeta);
   appShell.initSharedNavigation();
+
+  await loadRuntimeScript(pageMeta.rootPath + 'assets/js/shared/form-controls.js', 'shared-form-controls');
+  appFormControls.init();
 }
 
 /**
@@ -113,7 +116,8 @@ function getRuntimeReadyCheck(key) {
     'core-shell': () => !!window.appShell,
     'core-cursor': () => !!window.appCursor,
     'core-auth': () => !!window.auth,
-    'core-navigation': () => !!window.appNav
+    'core-navigation': () => !!window.appNav,
+    'shared-form-controls': () => !!window.appFormControls
   };
 
   if (key.startsWith('page-')) {
