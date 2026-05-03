@@ -174,11 +174,23 @@ const EnterpriseView = (function() {
    * @returns {void}
    */
   function confirmDelete(message, deleteAction, afterDelete) {
-    if (!window.confirm(message)) return;
+    if (window.appConfirm && typeof window.appConfirm.danger === 'function') {
+      window.appConfirm.danger(message, {
+        onConfirm() {
+          deleteAction();
+          if (typeof afterDelete === 'function') {
+            afterDelete();
+          }
+        }
+      });
+      return;
+    }
 
-    deleteAction();
-    if (typeof afterDelete === 'function') {
-      afterDelete();
+    if (window.confirm(message)) {
+      deleteAction();
+      if (typeof afterDelete === 'function') {
+        afterDelete();
+      }
     }
   }
 
