@@ -160,7 +160,7 @@ purchaseSystem.pages = (function(store, actions, renderers, view) {
 
     const data = store.sync();
     renderers.stats([
-      { icon: 'user-handshake', value: data.suppliers.filter((item) => item.status === '合作中').length, label: '合作供应商' },
+      { icon: 'heart-handshake', value: data.suppliers.filter((item) => item.status === '合作中').length, label: '合作供应商' },
       { icon: 'clipboard-list', value: data.orders.length, label: '采购订单' },
       { icon: 'currency-dollar', value: formatMoney(data.orders.reduce((sum, item) => sum + item.amount, 0)), label: '采购总额' },
       { icon: 'circle-check', value: data.orders.filter((item) => item.status === '已到货').length, label: '已到货' }
@@ -229,7 +229,7 @@ purchaseSystem.pages = (function(store, actions, renderers, view) {
       const suppliers = store.sync().suppliers;
       const active = suppliers.filter((item) => item.status === '合作中').length;
       renderers.stats([
-        { icon: 'user-handshake', value: suppliers.length, label: '供应商总数' },
+        { icon: 'heart-handshake', value: suppliers.length, label: '供应商总数' },
         { icon: 'circle-check', value: active, label: '合作中' },
         { icon: 'player-pause', value: suppliers.length - active, label: '已暂停' }
       ]);

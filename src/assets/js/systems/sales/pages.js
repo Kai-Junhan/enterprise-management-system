@@ -184,7 +184,7 @@ salesSystem.pages = (function(store, actions, renderers, view) {
     function render(list) {
       const customers = store.sync().customers;
       renderers.stats([
-        { icon: 'user-handshake', value: customers.length, label: '客户总数' },
+        { icon: 'heart-handshake', value: customers.length, label: '客户总数' },
         { icon: 'star', value: customers.filter((item) => item.level === 'VIP').length, label: 'VIP客户' },
         { icon: 'currency-dollar', value: formatMoney(customers.reduce((sum, item) => sum + item.totalAmount, 0)), label: '累计销售额' }
       ]);

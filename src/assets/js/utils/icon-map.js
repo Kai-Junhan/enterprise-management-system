@@ -12,19 +12,19 @@ var ICON_MAP = {
   '🛒': 'shopping-cart',
   '🏬': 'building-warehouse',
   '👥': 'users',
-  '👋': 'wave-sawtooth',
+  '👋': 'wave-sine',
   '📋': 'clipboard-list',
   '📦': 'package',
   '💰': 'currency-dollar',
-  '🔧': 'wrench',
+  '🔧': 'tool',
   '🚚': 'truck',
-  '🤝': 'user-handshake',
+  '🤝': 'heart-handshake',
   '👤': 'user',
   '📅': 'calendar',
   '🏆': 'trophy',
   '📡': 'radar',
   '📥': 'inbox',
-  '📤': 'outbox',
+  '📤': 'transfer-out',
   '🗺️': 'map',
   '⚠️': 'alert-triangle',
   '✅': 'circle-check',
@@ -33,7 +33,7 @@ var ICON_MAP = {
   '🏢': 'building',
   '🟢': 'circle-dot',
   '📨': 'mail',
-  '🔴': 'circle-filled',
+  '🔴': 'circle-dot',
   '🚨': 'bell-ringing',
   '🛑': 'player-stop',
   '🎯': 'target',
@@ -42,8 +42,18 @@ var ICON_MAP = {
   '⭐': 'star',
   '⏰': 'alarm',
   '❌': 'x',
-  '⚡': 'zap',
+  '⚡': 'bolt',
   '⏸️': 'player-pause'
+};
+
+var ICON_ALIASES = {
+  'circle-filled': 'circle-dot',
+  outbox: 'transfer-out',
+  'star-filled': 'star',
+  'user-handshake': 'heart-handshake',
+  'wave-sawtooth': 'wave-sine',
+  wrench: 'tool',
+  zap: 'bolt'
 };
 
 /**
@@ -53,6 +63,7 @@ var ICON_MAP = {
  */
 function renderIcon(name) {
   var key = ICON_MAP[name] || name;
+  key = ICON_ALIASES[key] || key;
   return '<i class="ti ti-' + key + '"></i>';
 }
 

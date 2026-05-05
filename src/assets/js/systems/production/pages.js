@@ -131,7 +131,7 @@ productionSystem.pages = (function(store, actions, renderers, view) {
     const data = store.sync();
     renderers.stats([
       { icon: 'calendar', value: data.plans.length, label: '生产计划' },
-      { icon: 'zap', value: data.plans.filter((item) => item.status === '进行中').length, label: '进行中计划' },
+      { icon: 'bolt', value: data.plans.filter((item) => item.status === '进行中').length, label: '进行中计划' },
       { icon: 'clipboard-list', value: data.orders.filter((item) => item.status !== '已完成').length, label: '待完成订单' },
       { icon: 'alert-triangle', value: data.materials.filter((item) => item.shortage > 0).length, label: '物料短缺项' }
     ]);
@@ -397,7 +397,7 @@ productionSystem.pages = (function(store, actions, renderers, view) {
       const orders = store.sync().orders;
       renderers.stats([
         { icon: 'clipboard-list', value: orders.length, label: '订单总数' },
-        { icon: 'zap', value: orders.filter((item) => item.status === '生产中').length, label: '生产中' },
+        { icon: 'bolt', value: orders.filter((item) => item.status === '生产中').length, label: '生产中' },
         { icon: 'circle-check', value: orders.filter((item) => item.status === '已完成').length, label: '已完成' }
       ]);
       view.renderRows(tbody, list, renderOrderRow, { colspan: 8, text: '暂无生产订单' });

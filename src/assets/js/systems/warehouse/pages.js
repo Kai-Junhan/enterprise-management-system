@@ -230,7 +230,7 @@ warehouseSystem.pages = (function(store, actions, renderers, view) {
         { icon: 'package', value: data.inventory.length, label: '库存品类' },
         { icon: 'alert-triangle', value: data.inventory.filter((item) => item.stock < item.minStock).length, label: '库存预警' },
         { icon: 'inbox', value: data.inbound.length, label: '近期入库' },
-        { icon: 'outbox', value: data.outbound.length, label: '近期出库' }
+        { icon: 'transfer-out', value: data.outbound.length, label: '近期出库' }
       ]);
       view.renderRows(tbody, list || inventory, renderInventoryRow, { colspan: 8, text: '暂无库存数据' });
 
@@ -400,7 +400,7 @@ warehouseSystem.pages = (function(store, actions, renderers, view) {
 
       renderers.stats([
         { icon: 'inbox', value: data.inbound.length, label: '入库单数' },
-        { icon: 'outbox', value: data.outbound.length, label: '出库单数' },
+        { icon: 'transfer-out', value: data.outbound.length, label: '出库单数' },
         { icon: 'package', value: data.inbound.reduce((sum, item) => sum + item.quantity, 0), label: '入库总量' },
         { icon: 'truck', value: data.outbound.reduce((sum, item) => sum + item.quantity, 0), label: '出库总量' }
       ]);
@@ -443,7 +443,7 @@ warehouseSystem.pages = (function(store, actions, renderers, view) {
       const inbound = keyword ? view.filterByKeyword(data.inbound, keyword, ['item', 'supplier']) : data.inbound;
 
       renderers.stats([
-        { icon: 'outbox', value: data.outbound.length, label: '出库单数' },
+        { icon: 'transfer-out', value: data.outbound.length, label: '出库单数' },
         { icon: 'truck', value: data.outbound.reduce((sum, item) => sum + item.quantity, 0), label: '出库总量' },
         { icon: 'inbox', value: data.inbound.length, label: '入库单数' },
         { icon: 'package', value: data.inbound.reduce((sum, item) => sum + item.quantity, 0), label: '入库总量' }
