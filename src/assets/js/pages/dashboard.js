@@ -235,7 +235,7 @@ window.appPages.dashboard = (function() {
 
     if (welcomeGreeting) {
       var name = user ? user.username : '管理员';
-      welcomeGreeting.innerHTML = greeting + '，<span id="welcome-name">' + name + '</span> ' + renderIcon('👋');
+      welcomeGreeting.innerHTML = greeting + '，<span id="welcome-name">' + name + '</span> ' + renderIcon('wave-sine');
     }
 
     if (welcomeTime) {
@@ -375,7 +375,7 @@ window.appPages.dashboard = (function() {
     }
 
     alertsEl.innerHTML =
-      '<div class="alerts-title">' + renderIcon('📌') + ' 待办提醒</div>' +
+      '<div class="alerts-title">' + renderIcon('pin') + ' 待办提醒</div>' +
       '<div class="alerts-list">' +
       alerts.map(function(a) {
         return '<span class="alert-tag alert-' + a.type + '">' + a.text + '</span>';

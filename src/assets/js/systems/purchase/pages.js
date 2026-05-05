@@ -369,7 +369,7 @@ purchaseSystem.pages = (function(store, actions, renderers, view) {
 
       renderers.stats([
         { icon: 'truck', value: orders.filter((item) => item.status === '运输中').length, label: '运输中' },
-        { icon: '⏳', value: orders.filter((item) => item.status === '待发货' || item.status === '待审核').length, label: '待发货/待审核' },
+        { icon: 'hourglass', value: orders.filter((item) => item.status === '待发货' || item.status === '待审核').length, label: '待发货/待审核' },
         { icon: 'circle-check', value: orders.filter((item) => item.status === '已到货').length, label: '已到货' }
       ]);
 

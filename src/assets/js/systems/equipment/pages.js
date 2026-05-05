@@ -349,7 +349,7 @@ equipmentSystem.pages = (function(store, actions, renderers, view) {
 
       renderers.stats([
         { icon: 'clipboard-list', value: list.length, label: '维护计划总数' },
-        { icon: '⏳', value: list.filter((item) => item.status === '待执行').length, label: '待执行' },
+        { icon: 'hourglass', value: list.filter((item) => item.status === '待执行').length, label: '待执行' },
         { icon: 'tool', value: list.filter((item) => item.status === '进行中').length, label: '进行中' },
         { icon: 'currency-dollar', value: formatMoney(list.reduce((sum, item) => sum + item.cost, 0)), label: '预估总费用' }
       ]);
