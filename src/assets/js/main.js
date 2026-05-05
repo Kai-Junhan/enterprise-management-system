@@ -47,6 +47,10 @@ const PAGE_EXTRA_UTILS = {
   register: ['validate']
 };
 
+const PAGE_EXTRA_SHARED = {
+  dashboard: ['charts']
+};
+
 const SCRIPT_READY_TIMEOUT = 15000;
 
 /**
@@ -117,6 +121,7 @@ function getRuntimeReadyCheck(key) {
     'core-cursor': () => !!window.appCursor,
     'core-auth': () => !!window.auth,
     'core-navigation': () => !!window.appNav,
+    'shared-charts': () => !!window.EnterpriseCharts,
     'shared-form-controls': () => !!window.appFormControls
   };
 
@@ -211,6 +216,11 @@ async function loadPageDependencies(pageMeta, controllerName) {
   const extraUtils = PAGE_EXTRA_UTILS[controllerName] || [];
   for (const name of extraUtils) {
     await loadRuntimeScript(pageMeta.rootPath + 'assets/js/utils/' + name + '.js', 'utils-' + name);
+  }
+
+  const extraShared = PAGE_EXTRA_SHARED[controllerName] || [];
+  for (const name of extraShared) {
+    await loadRuntimeScript(pageMeta.rootPath + 'assets/js/shared/' + name + '.js', 'shared-' + name);
   }
 
   await loadRuntimeScript(
