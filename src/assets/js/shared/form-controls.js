@@ -15,6 +15,7 @@ const appFormControls = (function() {
   let observer = null;
   let initialized = false;
   let scanTimer = null;
+  let syncTimer = null;
 
   /**
    * 初始化所有表单增强控件。
@@ -40,9 +41,53 @@ const appFormControls = (function() {
    * @returns {void}
    */
   function scanControls() {
+    cleanupDetachedControls();
     document.querySelectorAll(SELECT_SELECTOR).forEach(enhanceSelect);
     document.querySelectorAll(TIME_INPUT_SELECTOR).forEach(enhanceTimeInput);
     syncAll();
+  }
+
+  /**
+   * 清理已经离开 DOM 的增强控件。
+   * @returns {void}
+   */
+  function cleanupDetachedControls() {
+    selectControls.forEach((control, source) => {
+      if (!source.isConnected) {
+        destroyControl(control);
+        selectControls.delete(source);
+      }
+    });
+
+    timeControls.forEach((control, source) => {
+      if (!source.isConnected) {
+        destroyControl(control);
+        timeControls.delete(source);
+      }
+    });
+  }
+
+  /**
+   * 销毁增强控件的浮层和监听器。
+   * @param {Object} control 控件状态。
+   * @returns {void}
+   */
+  function destroyControl(control) {
+    if (activeControl === control) {
+      activeControl = null;
+    }
+
+    if (control.optionsObserver) {
+      control.optionsObserver.disconnect();
+    }
+
+    if (control.panel && control.panel.parentElement) {
+      control.panel.remove();
+    }
+
+    if (control.wrapper && control.wrapper.parentElement && !control.source.isConnected) {
+      control.wrapper.remove();
+    }
   }
 
   /**
@@ -620,7 +665,12 @@ const appFormControls = (function() {
    * @returns {void}
    */
   function scheduleSync() {
-    requestAnimationFrame(syncAll);
+    if (syncTimer) return;
+    syncTimer = requestAnimationFrame(() => {
+      syncTimer = null;
+      cleanupDetachedControls();
+      syncAll();
+    });
   }
 
   /**

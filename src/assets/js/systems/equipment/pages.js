@@ -90,7 +90,7 @@ equipmentSystem.pages = (function(store, actions, renderers, view) {
         <td>${item.id}</td>
         <td><strong>${item.equipName}</strong></td>
         <td>${item.faultDate}</td>
-        <td style="max-width:260px;color:var(--color-text-secondary)">${item.description}</td>
+        <td class="table-cell-description">${item.description}</td>
         <td><span class="badge ${renderers.severityMap[item.severity] || 'badge-default'}">${item.severity}</span></td>
         <td>${item.handler}</td>
         <td><span class="badge ${renderers.faultStatusMap[item.status] || 'badge-default'}">${item.status}</span></td>
@@ -162,7 +162,8 @@ equipmentSystem.pages = (function(store, actions, renderers, view) {
 
     if (!list.length) {
       const parent = canvas.parentElement;
-      if (parent) parent.innerHTML = '<div style="text-align:center;color:var(--color-text-secondary);padding:60px 0">暂无设备数据</div>';
+      if (typeof EnterpriseCharts !== 'undefined') EnterpriseCharts.destroy(canvas);
+      if (parent) parent.innerHTML = '<div class="chart-empty">暂无设备数据</div>';
       return;
     }
 

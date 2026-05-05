@@ -19,7 +19,7 @@ warehouseSystem.pages = (function(store, actions, renderers, view) {
         <td><strong>${item.name}</strong></td>
         <td>${item.category}</td>
         <td>${item.location}</td>
-        <td>${low ? `<span style="color:var(--color-danger);font-weight:600">${item.stock}</span>` : item.stock} ${item.unit}</td>
+        <td>${low ? `<span class="text-danger-strong">${item.stock}</span>` : item.stock} ${item.unit}</td>
         <td>${item.minStock} ${item.unit}</td>
         <td><span class="badge ${low ? 'badge-danger' : 'badge-success'}">${low ? '库存不足' : '正常'}</span></td>
         <td><div class="table-actions"><button class="btn btn-outline btn-sm" data-action="edit" data-id="${item.id}">编辑</button><button class="btn btn-danger btn-sm" data-action="delete" data-id="${item.id}">删除</button></div></td>
@@ -144,9 +144,9 @@ warehouseSystem.pages = (function(store, actions, renderers, view) {
         <td><strong>${item.name}</strong></td>
         <td>${item.category}</td>
         <td>${item.spec}</td>
-        <td><span style="color:var(--color-danger);font-weight:600">${item.stock} ${item.unit}</span></td>
+        <td><span class="text-danger-strong">${item.stock} ${item.unit}</span></td>
         <td>${item.minStock} ${item.unit}</td>
-        <td><span style="color:var(--color-danger);font-weight:600">${gap} ${item.unit}</span></td>
+        <td><span class="text-danger-strong">${gap} ${item.unit}</span></td>
         <td><span class="badge ${urgency === '紧急' ? 'badge-danger' : 'badge-warning'}">${urgency}</span></td>
       </tr>
     `;

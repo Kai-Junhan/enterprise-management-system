@@ -52,6 +52,14 @@
     cursor: not-allowed;
 }
 
+.form-control--narrow {
+    width: 120px;
+}
+
+.form-group--wide {
+    grid-column: 1 / -1;
+}
+
 /* ④ 下拉框:表示可以展开 */
 select.form-control {
     cursor: pointer;
